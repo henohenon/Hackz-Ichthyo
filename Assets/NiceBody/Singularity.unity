@@ -379,13 +379,16 @@ MonoBehaviour:
   input_:
     move_: {fileID: -4496373918881158703, guid: 7d1a614651aa4b24f8bddc434c92ea1b, type: 3}
     attack_: {fileID: -4496373918881158703, guid: 7d1a614651aa4b24f8bddc434c92ea1b, type: 3}
+  superComputer_:
+    processingPower_: 1
+  health_:
+    value:
+      value_: 0
   singularityIq_:
     value_: 100
   iq_:
     value:
       value_: 0
-  superComputer_:
-    processingPower_: 1
   stateContextBase_:
   - {fileID: 1689197536}
   - {fileID: 1689197535}
