@@ -68,13 +68,12 @@ public class HexAOE : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (((1 << other.gameObject.layer) & damageLayer) == 0) return;
+        if (((1 << other.gameObject.layer) & damageLayer) == 0) 
+            return;
 
-        var target = other.GetComponent<EnemyBase>();
-        if (target != null)
+        if (other.TryGetComponent<EnemyBase>(out var target))
         {
-            //target.OnDamage((int)damage_);
-            Debug.LogError("jfiejiwoajefioa");
+            target.OnDamage(damage_);
         }
     }
 }
