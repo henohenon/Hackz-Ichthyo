@@ -48,6 +48,14 @@ public sealed class WaveSystem : MonoBehaviour
     private async UniTask SpawnEnemiesAsync(GameObject prefab, int count)
     {
         NativeArray<Vector3> positions = new(count, Allocator.TempJob);
+        NativeArray<uint> randomSeeds = new(count, Allocator.TempJob);
+
+        // シード生成（適度に分散させる）
+        uint baseSeed = (uint)UnityEngine.Random.Range(1, int.MaxValue);
+        for (int i = 0; i < count; i++)
+        {
+            randomSeeds[i] = baseSeed + (uint)(i * 997); // 997 は素数で分散性を高める
+        }
 
         var job = new EnemySpawnPositionJob
         {
@@ -55,7 +63,8 @@ public sealed class WaveSystem : MonoBehaviour
             xRange = new Vector2(-5f, 5f),
             yRange = new Vector2(-3f, 3f),
             playerPosition = player_.transform.position,
-            spawnPositions = positions
+            spawnPositions = positions,
+            randomSeeds = randomSeeds
         };
 
         JobHandle handle = job.Schedule(count, 32);
@@ -69,6 +78,8 @@ public sealed class WaveSystem : MonoBehaviour
         }
 
         positions.Dispose();
+        randomSeeds.Dispose();
+
         Debug.Log($"Spawned {count} of {prefab.name}");
     }
 
@@ -82,11 +93,16 @@ public sealed class WaveSystem : MonoBehaviour
 
         [WriteOnly] public NativeArray<Vector3> spawnPositions;
 
+        [ReadOnly] public NativeArray<uint> randomSeeds;
+
         public void Execute(int index)
         {
-            float x = UnityEngine.Random.Range(xRange.x, xRange.y);
-            float y = UnityEngine.Random.Range(yRange.x, yRange.y);
-            Vector3 offset = new Vector3(x * spawnRange, y * spawnRange, 0f);
+            var rand = new Unity.Mathematics.Random(randomSeeds[index]);
+
+            float x = rand.NextFloat(xRange.x, xRange.y);
+            float y = rand.NextFloat(yRange.x, yRange.y);
+
+            Vector3 offset = new(x * spawnRange, y * spawnRange, 0f);
             spawnPositions[index] = playerPosition + offset;
         }
     }

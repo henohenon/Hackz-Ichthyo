@@ -15,8 +15,7 @@ namespace Player.Skill
         {
             if (other.TryGetComponent(out EnemyBase target))
             {
-                //target.OnDamage((int)damage_);
-                UnityEngine.Debug.LogError("jifejajfioe");
+                target.OnDamage((int)damage_);
             }
         }
     }

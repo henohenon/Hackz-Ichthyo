@@ -34,7 +34,7 @@ abstract public class EnemyBase : MonoBehaviour
         return context;
     }
 
-    protected void onDamage(float damage)
+    public void OnDamage(float damage)
     {
         this.hitPoint -= damage;
     }
