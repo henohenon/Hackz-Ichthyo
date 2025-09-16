@@ -38,6 +38,13 @@ abstract public class EnemyBase : MonoBehaviour
     {
         this.hitPoint -= damage;
     }
+    abstract protected void SetActions();
+
+    void Start()
+    {
+        SetActions();
+        OnAction();
+    }
 
     void Update()
     {
