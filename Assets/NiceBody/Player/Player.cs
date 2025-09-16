@@ -1,4 +1,5 @@
-﻿using Player.Skill;
+﻿using Alchemy.Inspector;
+using Player.Skill;
 using Player.State;
 using R3;
 using System;
@@ -8,25 +9,28 @@ using UnityEngine;
 
 namespace Player
 {
-    [RequireComponent(typeof(Rigidbody2D), typeof(UnityEngine.Animator))]
+    [RequireComponent(typeof(Rigidbody2D))]
     public sealed class Player : MonoBehaviour
     {
-        [SerializeField] Input input_;
-        [SerializeField] SuperComputer superComputer_;
-        [SerializeField] Animator animator_;
-        [SerializeField] LearnedSkillGroup learnedSkillGroup_;
+        [SerializeField] private Input input_;
+        [SerializeField] private SuperComputer superComputer_;
+        [SerializeField] private Animator animator_;
+        [SerializeField] private LearnedSkillGroup learnedSkillGroup_;
 
-        [SerializeField] private SerializableReactiveProperty<Health> health_;
+        [SerializeField] private Health maxHealth_;
+        [SerializeField] private SerializableReactiveProperty<Health> health_ = new(new Health(10));
         [SerializeField] private IQ singularityIq_;
-        [SerializeField] private SerializableReactiveProperty<IQ> iq_;
+        [SerializeField] private SerializableReactiveProperty<IQ> iq_ = new();
 
         [SerializeField] private List<StateContextBase> stateContextBase_;
         private readonly Dictionary<Type, IState> states_ = new();
         private IState state_;
 
+        public Health MaxHealth => maxHealth_;
+        public ReadOnlyReactiveProperty<Health> Health => health_;
         public ReadOnlyReactiveProperty<IQ> IQ => iq_;
         public IQ SingularityIq_ => singularityIq_;
-        public LearnedSkillGroup LearnedSkillGroup_ => learnedSkillGroup_; 
+        public LearnedSkillGroup LearnedSkillGroup_ => learnedSkillGroup_;
 
 
         private void Awake()
@@ -40,8 +44,6 @@ namespace Player
 
         private void Update()
         {
-            health_ = new();
-
             state_?.OnUpdate();
             superComputer_.Tick(iq_);
 
@@ -95,6 +97,11 @@ namespace Player
             Debug.LogWarning($"Context of type {typeof(TContext).Name} not found.");
         }
 
-        public void OnDamage(int damage) => health_.OnNext(new Health(health_.Value.Value - damage));
+        [Button]
+        public void OnDamage(int damage)
+        {
+            health_.OnNext(new Health(health_.Value.Value - damage));
+            Debug.Log(health_.Value.Value);
+        }
     }
 }

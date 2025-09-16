@@ -1,32 +1,66 @@
-﻿using R3;
+﻿using Alchemy.Inspector;
+using R3;
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using UnityEngine;
 
 namespace Player.Skill
 {
     [Serializable]
-    public class LearnedSkillGroup
+    public sealed class LearnedSkillGroup
     {
-        private readonly List<LearnedSkill> learnedSkills_ = new();
-        private readonly Subject<Unit> onLearnSkill_ = new();
+        [SerializeField] private List<LearnedSkill> learnedSkills_ = new();
 
-        public Observable<Unit> OnLearnSkill => onLearnSkill_;
+        private readonly Subject<SelectLernSkillGroup> onSelectLearnSkill = new();
+        public Observable<SelectLernSkillGroup> OnSelectLearnSkill => onSelectLearnSkill;
 
-        public void LearnSkill(SkillBase skill, int initialLevel = 1)
+        private readonly Subject<LearnedSkill> onLearnSkill = new();
+        public Observable<LearnedSkill> OnLearnSkill => onLearnSkill;
+
+        private readonly CancellationTokenSource skillLoopCts_ = new();
+
+        public void SelectLearnSkill(SelectLernSkillGroup skill)
         {
-            if (skill == null) return;
+            if (skill == null)
+                return;
+
+            onSelectLearnSkill.OnNext(skill);
+        }
+
+        public void LearnSkill(SkillBase skill)
+        {
+            if (skill == null)
+                return;
 
             var existing = learnedSkills_.Find(ls => ls.Skill == skill);
             if (existing == null)
             {
-                learnedSkills_.Add(new LearnedSkill(skill, initialLevel));
+                var newSkill = new LearnedSkill(skill, 1);
+
+                var context = new SkillBase.UseSkillContext(UnityEngine.Object.FindObjectOfType<Player>());
+                UniTaskVoid uniTaskVoid = newSkill.LoopUseSkillAsync(context, skillLoopCts_.Token);
+
+                learnedSkills_.Add(newSkill);
+
+                // 新規習得を通知
+                onLearnSkill.OnNext(newSkill);
             }
             else
             {
                 existing.LevelUp();
             }
-
-            onLearnSkill_.OnNext(Unit.Default);
         }
+
+#if UNITY_EDITOR
+        [SerializeField] private SelectLernSkillGroup selectSkillGroup;
+
+        [Button]
+        private void SelectLearnSkillButton()
+        {
+            SelectLearnSkill(selectSkillGroup);
+        }
+#endif
     }
 }
