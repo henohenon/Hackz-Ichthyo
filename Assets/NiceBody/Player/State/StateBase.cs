@@ -1,18 +1,20 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Player
+namespace Player.State
 {
     public abstract class StateBase<T> : IState where T : StateContextBase
     {
+        private readonly Animator animator_;
         private readonly Input input_;
         private readonly Action<Type> onChangeState_;
         private readonly Transform transform_;
         private readonly Rigidbody2D rigidBody_;
         private readonly T context_;
 
-        public StateBase(Input input, Action<Type> onChangeState,  Transform transform, Rigidbody2D rigidBody, T context)
+        public StateBase(Animator animator, Input input, Action<Type> onChangeState,  Transform transform, Rigidbody2D rigidBody, T context)
         {
+            animator_       = animator;
             input_          = input;
             onChangeState_  = onChangeState;
             transform_      = transform;
@@ -28,6 +30,7 @@ namespace Player
         /// NOTE: 以下サンドボックスパターン
         /// </summary>
         protected T Context             => context_;
+        protected Animator Animator     => animator_;
         protected Transform Transform   => transform_;
         protected Rigidbody2D Rigidbody => rigidBody_;
         protected Input Input           => input_;

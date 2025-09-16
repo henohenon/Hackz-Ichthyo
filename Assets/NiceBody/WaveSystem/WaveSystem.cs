@@ -51,7 +51,8 @@ public sealed class WaveSystem : MonoBehaviour
             float y = Random.Range(-3f, 3f);
             Vector3 spawnPosition = new Vector3(x * spawnEnemyDistsanceRange_, y * spawnEnemyDistsanceRange_, 0f) + player_.transform.position;
 
-            Instantiate(prefab, spawnPosition, Quaternion.identity);
+            var enemy = Instantiate(prefab, spawnPosition, Quaternion.identity);
+            enemy.GetComponent<EnemyBase>().Initialize(player_);
         }
 
         Debug.Log($"Spawned {count} of {prefab.name}");

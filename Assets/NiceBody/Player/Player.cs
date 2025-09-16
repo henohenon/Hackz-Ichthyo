@@ -1,4 +1,6 @@
-﻿using R3;
+﻿using Player.Skill;
+using Player.State;
+using R3;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,11 +8,13 @@ using UnityEngine;
 
 namespace Player
 {
-    [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(Rigidbody2D), typeof(UnityEngine.Animator))]
     public sealed class Player : MonoBehaviour
     {
         [SerializeField] Input input_;
         [SerializeField] SuperComputer superComputer_;
+        [SerializeField] Animator animator_;
+        [SerializeField] LearnedSkillGroup learnedSkillGroup_;
 
         [SerializeField] private SerializableReactiveProperty<Health> health_;
         [SerializeField] private IQ singularityIq_;
@@ -22,6 +26,7 @@ namespace Player
 
         public ReadOnlyReactiveProperty<IQ> IQ => iq_;
         public IQ SingularityIq_ => singularityIq_;
+        public LearnedSkillGroup LearnedSkillGroup_ => learnedSkillGroup_; 
 
 
         private void Awake()
@@ -77,6 +82,7 @@ namespace Player
 
             var state = (IState)Activator.CreateInstance(
                             typeof(TState),
+                            animator_,
                             input_,
                             new Action<Type>(OnChangeState),
                             transform,

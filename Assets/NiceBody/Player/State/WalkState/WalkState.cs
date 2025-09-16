@@ -1,17 +1,17 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Player
+namespace Player.State
 {
     public sealed class WalkState : StateBase<WalkStateContext>
     {
-        public WalkState(Input input, Action<Type> onChangeState, Transform transform, Rigidbody2D rigidBody, WalkStateContext context) : base(input, onChangeState, transform, rigidBody, context) { }
+        public WalkState(Animator animator, Input input, Action<Type> onChangeState, Transform transform, Rigidbody2D rigidBody, WalkStateContext context) : base(animator, input, onChangeState, transform, rigidBody, context) { }
 
 
 
         public override void OnEnter()
         {
-            
+            Animator.Walk();
         }
 
         public override void OnUpdate()
@@ -27,7 +27,7 @@ namespace Player
 
         public override void OnExit()
         {
-            
+            Animator.WalkOff();
         }
     }
 }

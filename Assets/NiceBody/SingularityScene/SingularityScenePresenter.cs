@@ -6,7 +6,7 @@ public sealed class SingularityScenePresenter : MonoBehaviour
     [SerializeField] private SingularitySceneView sceneView;
     [SerializeField] private Player.Player player_;
 
-        
+    
 
     private void Awake()
     {
