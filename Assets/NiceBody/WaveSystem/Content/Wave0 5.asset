@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldown_secs: 10
   summonEnemies:
-  - gameObject_: {fileID: 3957064112005008361, guid: e423bfa6618ecb244a50f32881346436, type: 3}
+  - gameObject_: {fileID: 5021079513498498174, guid: df635b260d1844e418fe1b077d64a04d, type: 3}
     count_: 10

@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using System;
 
+[RequireComponent(typeof(Collider2D))]
 public class HexAOE : MonoBehaviour
 {
     [Header("演出パラメータ")]
@@ -10,7 +11,6 @@ public class HexAOE : MonoBehaviour
     [SerializeField] private AnimationCurve shrinkCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
 
     [Header("ダメージ設定")]
-    [SerializeField] private LayerMask damageLayer;
     [SerializeField] private float attractionForce = 2f;
 
     [SerializeField] private float size_;
@@ -54,7 +54,7 @@ public class HexAOE : MonoBehaviour
     {
         if (!attract_) return;
 
-        var colliders = Physics2D.OverlapCircleAll(transform.position, size_, damageLayer);
+        var colliders = Physics2D.OverlapCircleAll(transform.position, size_);
         foreach (var col in colliders)
         {
             var rb = col.attachedRigidbody;
@@ -68,8 +68,7 @@ public class HexAOE : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (((1 << other.gameObject.layer) & damageLayer) == 0) 
-            return;
+        UnityEngine.Debug.Log("jifioe");
 
         if (other.TryGetComponent<EnemyBase>(out var target))
         {

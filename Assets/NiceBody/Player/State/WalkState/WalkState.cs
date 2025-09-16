@@ -5,7 +5,7 @@ namespace Player.State
 {
     public sealed class WalkState : StateBase<WalkStateContext>
     {
-        public WalkState(Animator animator, Input input, Action<Type> onChangeState, Transform transform, Rigidbody2D rigidBody, WalkStateContext context) : base(animator, input, onChangeState, transform, rigidBody, context) { }
+        public WalkState(Animator animator, Input input, Action<Type> onChangeState, Func<bool> isDeath, Transform transform, Rigidbody2D rigidBody, WalkStateContext context) : base(animator, input, onChangeState, isDeath, transform, rigidBody, context) { }
 
 
 
@@ -21,7 +21,6 @@ namespace Player.State
 
             Rigidbody.velocity = Context.MoveSpeed_ * Time.deltaTime * move;
 
-            // 向きの反転（rotation.y を 0 または 180 に）
             if (move.x != 0)
             {
                 Transform.rotation = Quaternion.Euler(0, move.x > 0 ? 0 : 180, 0);
@@ -30,6 +29,11 @@ namespace Player.State
             if (move == Vector2.zero)
             {
                 OnChangeState<IdleState>();
+            }
+
+            if (IsDeath())
+            {
+                OnChangeState<DeathState>();
             }
         }
 
