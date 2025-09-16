@@ -37,6 +37,15 @@ abstract public class EnemyBase : MonoBehaviour
     public void OnDamage(float damage)
     {
         this.hitPoint -= damage;
+
+        if (Helper.Instance != null)
+        {
+            Helper.Instance.ShowDamage(transform.position, (int)damage);
+        }
+        else
+        {
+            Debug.LogWarning("Helper.Instance is null. Damage text not shown.");
+        }
     }
     abstract protected void SetActions();
 

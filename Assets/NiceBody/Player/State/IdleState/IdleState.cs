@@ -5,7 +5,7 @@ namespace Player.State
 {
     public sealed class IdleState : StateBase<IdleStateContext>
     {
-        public IdleState(Animator animator, Input input, Action<Type> onChangeState, Transform transform, Rigidbody2D rigidBody, IdleStateContext context) : base(animator, input, onChangeState, transform, rigidBody, context) { }
+        public IdleState(Animator animator, Input input, Action<Type> onChangeState, Func<bool> isDeath, Transform transform, Rigidbody2D rigidBody, IdleStateContext context) : base(animator, input, onChangeState, isDeath, transform, rigidBody, context) { }
 
 
 
@@ -19,6 +19,11 @@ namespace Player.State
             if (Input.Move.action.ReadValue<Vector2>() != Vector2.zero)
             {
                 OnChangeState<WalkState>();
+            }
+
+            if(IsDeath())
+            {
+                OnChangeState<DeathState>();
             }
         }
 

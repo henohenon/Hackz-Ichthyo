@@ -87,6 +87,7 @@ namespace Player
                             animator_,
                             input_,
                             new Action<Type>(OnChangeState),
+                            new Func<bool>(IsDeath),
                             transform,
                             GetComponent<Rigidbody2D>(),
                             matchedContext
@@ -102,6 +103,15 @@ namespace Player
         {
             health_.OnNext(new Health(health_.Value.Value - damage));
             Debug.Log(health_.Value.Value);
+        }
+
+        private bool IsDeath()
+        {
+            if (health_.Value.Value <= 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
