@@ -4,6 +4,14 @@ namespace Player.Skill
 {
     public abstract class SkillBase : ScriptableObject
     {
+        [SerializeField] private Sprite icon_;
+        [SerializeField] private string skillName_;
+        [SerializeField] private string skillDescription_;
+
+        public Sprite Icon => icon_;
+        public string SkillName => skillName_;
+        public string SkillDescription => skillDescription_;
+
         public abstract void OnAction(UseSkillContext context);
 
         public readonly struct UseSkillContext

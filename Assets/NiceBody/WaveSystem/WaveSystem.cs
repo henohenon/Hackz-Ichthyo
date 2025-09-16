@@ -9,6 +9,8 @@ public sealed class WaveSystem : MonoBehaviour
     [SerializeField] private List<WaveData> waves_;
     [SerializeField] private List<EventBase> waveEvents_;
 
+
+
     private void Start()
     {
         RunWavesAsync().Forget();

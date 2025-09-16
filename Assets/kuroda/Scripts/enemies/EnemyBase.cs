@@ -5,7 +5,7 @@ abstract public class EnemyBase : MonoBehaviour
 {
     [SerializeField] protected int hitPoint, speed;
     [SerializeField] private Player.Player player_;
-    protected List<ActionBase> actions = new List<ActionBase>();
+    protected List<ActionBase> actions = new();
 
     public void Initialize(Player.Player player)
     {
@@ -22,10 +22,12 @@ abstract public class EnemyBase : MonoBehaviour
     }
     protected Context SetContext()
     {
-        Context context = new Context();
-        context.EnemyTransform = this.transform;
-        context.PlayerTransform = this.transform;//仮置き、後で変更する
-        context.speed = this.speed;
+        Context context = new()
+        {
+            EnemyTransform = transform,
+            PlayerTransform = transform,
+            speed = speed
+        };
         return context;
     }
 

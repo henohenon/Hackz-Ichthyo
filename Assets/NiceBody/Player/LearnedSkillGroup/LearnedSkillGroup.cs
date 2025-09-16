@@ -5,28 +5,36 @@ using System.Collections.Generic;
 namespace Player.Skill
 {
     [Serializable]
-    public class LearnedSkillGroup
+    public sealed class LearnedSkillGroup
     {
         private readonly List<LearnedSkill> learnedSkills_ = new();
-        private readonly Subject<Unit> onLearnSkill_ = new();
+        private readonly Subject<SelectLernSkillGroup> onSelectLearnSkill = new();
 
-        public Observable<Unit> OnLearnSkill => onLearnSkill_;
+        public Observable<SelectLernSkillGroup> OnSelectLearnSkill => onSelectLearnSkill;
 
-        public void LearnSkill(SkillBase skill, int initialLevel = 1)
+        public void SelectLearnSkill(SelectLernSkillGroup skill)
         {
-            if (skill == null) return;
+            if (skill == null) 
+                return;
+
+            // Subject 経由で通知
+            onSelectLearnSkill.OnNext(skill);
+        }
+
+        public void LearnSkill(SkillBase skill)
+        {
+            if (skill == null) 
+                return;
 
             var existing = learnedSkills_.Find(ls => ls.Skill == skill);
             if (existing == null)
             {
-                learnedSkills_.Add(new LearnedSkill(skill, initialLevel));
+                learnedSkills_.Add(new LearnedSkill(skill, 1));
             }
             else
             {
                 existing.LevelUp();
             }
-
-            onLearnSkill_.OnNext(Unit.Default);
         }
     }
 }
