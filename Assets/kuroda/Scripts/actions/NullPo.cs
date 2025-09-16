@@ -64,6 +64,7 @@ public class NullPo : ActionBase
         }
         if (gameObject != null)
         {
+            // ここでplayerのonDamage()を呼び出してください
             Object.Destroy(gameObject);
         }
     }
