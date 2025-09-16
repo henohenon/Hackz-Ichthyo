@@ -8,6 +8,8 @@ using UnityEngine.UI;
 [Serializable]
 public sealed class SingularitySceneView
 {
+    [SerializeField] LearnedSkillUI learnedSkillUISlotPrefab;
+    [SerializeField] RectTransform skillSlotGroup;
     [SerializeField] private Canvas onLearnSkillCanvas;
     [SerializeField] List<SelectLearnSkillUI> selectLearnSkillUIs;
     [SerializeField] private Text needCalculateTime;
@@ -28,6 +30,11 @@ public sealed class SingularitySceneView
             .Zip(SelectLearnSkillUIs, (skill, ui) => (skill, ui))
             .ToList()
             .ForEach(pair => pair.ui.SetSkillInfo(pair.skill));
+    }
+
+    public void AddLearnSkill(SkillBase learnSkill)
+    {
+        UnityEngine.Object.Instantiate(learnedSkillUISlotPrefab, skillSlotGroup).Icon.sprite = learnSkill.Icon;
     }
 
     public void OnCloseSelectLearnSkill()

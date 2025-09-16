@@ -1,5 +1,6 @@
 ﻿using Alchemy.Inspector;
 using R3;
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -11,9 +12,12 @@ namespace Player.Skill
     public sealed class LearnedSkillGroup
     {
         [SerializeField] private List<LearnedSkill> learnedSkills_ = new();
-        private readonly Subject<SelectLernSkillGroup> onSelectLearnSkill = new();
 
+        private readonly Subject<SelectLernSkillGroup> onSelectLearnSkill = new();
         public Observable<SelectLernSkillGroup> OnSelectLearnSkill => onSelectLearnSkill;
+
+        private readonly Subject<LearnedSkill> onLearnSkill = new();
+        public Observable<LearnedSkill> OnLearnSkill => onLearnSkill;
 
         private readonly CancellationTokenSource skillLoopCts_ = new();
 
@@ -36,9 +40,12 @@ namespace Player.Skill
                 var newSkill = new LearnedSkill(skill, 1);
 
                 var context = new SkillBase.UseSkillContext(UnityEngine.Object.FindObjectOfType<Player>());
-                Cysharp.Threading.Tasks.UniTaskVoid uniTaskVoid = newSkill.LoopUseSkillAsync(context, skillLoopCts_.Token);
+                UniTaskVoid uniTaskVoid = newSkill.LoopUseSkillAsync(context, skillLoopCts_.Token);
 
                 learnedSkills_.Add(newSkill);
+
+                // 新規習得を通知
+                onLearnSkill.OnNext(newSkill);
             }
             else
             {

@@ -31,10 +31,8 @@ public sealed class SingularityScenePresenter : MonoBehaviour
             );
 
         // Health 表示更新
-        player_.Health.Subscribe(health =>
-        {
-            sceneView.HealthSlider.value = GetNormalizedHealth(health.Value, player_.MaxHealth.Value);
-        });
+        player_.Health.Subscribe(health => sceneView.HealthSlider.value = GetNormalizedHealth(health.Value, player_.MaxHealth.Value));
+        player_.LearnedSkillGroup_.OnLearnSkill.Subscribe(skill => sceneView.AddLearnSkill(skill.Skill));
     }
 
     private float GetNormalizedHealth(int current, int max)
