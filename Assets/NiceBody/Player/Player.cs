@@ -1,6 +1,7 @@
 ﻿using R3;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Player
@@ -20,6 +21,8 @@ namespace Player
         private IState state_;
 
         public ReadOnlyReactiveProperty<IQ> IQ => iq_;
+        public IQ SingularityIq_ => singularityIq_;
+
 
         private void Awake()
         {
@@ -32,10 +35,12 @@ namespace Player
 
         private void Update()
         {
+            health_ = new();
+
             state_?.OnUpdate();
             superComputer_.Tick(iq_);
 
-            if (IQ.CurrentValue > singularityIq_)
+            if (IQ.CurrentValue > SingularityIq_)
             {
                 OnChangeState(typeof(SingularitiedState));
             }
@@ -66,23 +71,20 @@ namespace Player
 
         private void RegisterState<TState, TContext>() where TState : IState where TContext : StateContextBase
         {
-            foreach (var context in stateContextBase_)
-            {
-                if (context is TContext matchedContext)
-                {
-                    var state = (IState)Activator.CreateInstance(
-                                            typeof(TState),
-                                            input_,
-                                            new Action<Type>(OnChangeState), // ← 明示的にキャスト
-                                            transform,
-                                            GetComponent<Rigidbody2D>(),
-                                            matchedContext
-                                        );
+            var matchedContext = stateContextBase_.OfType<TContext>().FirstOrDefault();
+            if (matchedContext == null) 
+                return;
 
-                    states_.Add(typeof(TState), state);
-                    return;
-                }
-            }
+            var state = (IState)Activator.CreateInstance(
+                            typeof(TState),
+                            input_,
+                            new Action<Type>(OnChangeState),
+                            transform,
+                            GetComponent<Rigidbody2D>(),
+                            matchedContext
+                        );
+
+            states_.Add(typeof(TState), state);
 
             Debug.LogWarning($"Context of type {typeof(TContext).Name} not found.");
         }
