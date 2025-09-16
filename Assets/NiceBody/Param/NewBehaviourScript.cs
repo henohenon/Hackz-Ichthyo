@@ -20,12 +20,12 @@ public struct IQ : IComparable<IQ>, IEquatable<IQ>
     public static IQ operator +(IQ a, float b) => new(a.value_ + b);
     public static IQ operator -(IQ a, float b) => new(a.value_ - b);
 
-    public static bool operator ==(IQ a, IQ b)  => a.value_ == b.value_;
-    public static bool operator !=(IQ a, IQ b)  => a.value_ != b.value_;
-    public static bool operator < (IQ a, IQ b)   => a.value_ < b.value_;
-    public static bool operator > (IQ a, IQ b)   => a.value_ > b.value_;
-    public static bool operator <=(IQ a, IQ b)  => a.value_ <= b.value_;
-    public static bool operator >=(IQ a, IQ b)  => a.value_ >= b.value_;
+    public static bool operator ==(IQ a, IQ b) => a.value_ == b.value_;
+    public static bool operator !=(IQ a, IQ b) => a.value_ != b.value_;
+    public static bool operator < (IQ a, IQ b) => a.value_ < b.value_;
+    public static bool operator > (IQ a, IQ b) => a.value_ > b.value_;
+    public static bool operator <=(IQ a, IQ b) => a.value_ <= b.value_;
+    public static bool operator >=(IQ a, IQ b) => a.value_ >= b.value_;
 
     public bool             Equals(IQ other)    => value_ == other.value_;
     public int              CompareTo(IQ other) => value_.CompareTo(other.value_);

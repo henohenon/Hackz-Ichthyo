@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Player
+namespace Player.State
 {
     public abstract class StateContextBase : MonoBehaviour
     {

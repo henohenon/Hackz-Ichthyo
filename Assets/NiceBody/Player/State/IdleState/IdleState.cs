@@ -1,17 +1,17 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Player
+namespace Player.State
 {
     public sealed class IdleState : StateBase<IdleStateContext>
     {
-        public IdleState(Input input, Action<Type> onChangeState, Transform transform, Rigidbody2D rigidBody, IdleStateContext context) : base(input, onChangeState, transform, rigidBody, context) { }
+        public IdleState(Animator animator, Input input, Action<Type> onChangeState, Transform transform, Rigidbody2D rigidBody, IdleStateContext context) : base(animator, input, onChangeState, transform, rigidBody, context) { }
 
 
 
         public override void OnEnter()
         {
-
+            
         }
 
         public override void OnUpdate()
@@ -24,7 +24,7 @@ namespace Player
 
         public override void OnExit()
         {
-
+            
         }
     }
 }
