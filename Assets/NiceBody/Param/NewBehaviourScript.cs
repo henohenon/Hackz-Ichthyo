@@ -13,7 +13,7 @@ public struct IQ : IComparable<IQ>, IEquatable<IQ>
         value_ = value;
     }
 
-    public readonly float Value_ => value_;
+    public readonly float Value => value_;
 
     public static IQ operator +(IQ a, IQ b   ) => new(a.value_ + b.value_);
     public static IQ operator -(IQ a, IQ b   ) => new(a.value_ - b.value_);

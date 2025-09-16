@@ -4,6 +4,5 @@ namespace Player
 {
     public abstract class StateContextBase : MonoBehaviour
     {
-        
     }
 }
