@@ -1,34 +1,50 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 abstract public class EnemyBase : MonoBehaviour
 {
-    [SerializeField] protected int hitPoint, speed;
+    [SerializeField] protected float hitPoint, speed;
     [SerializeField] private Player.Player player_;
-    protected List<ActionBase> actions = new();
+    protected Dictionary<ActionBase, float?> actionDurationPairs = new Dictionary<ActionBase, float?>();
 
     public void Initialize(Player.Player player)
     {
         player_ = player;
     }
 
-    protected void OnAction()
+    protected async Task OnAction()
     {
         Context context = SetContext();
-        foreach (ActionBase action in actions)
+        while (true)
         {
-            action.DoAction(context);
+            foreach (KeyValuePair<ActionBase, float?> pair in actionDurationPairs)
+            {
+                Debug.Log("pair.Key: " + pair.Key + "pair.Value: " + pair.Value);
+                await pair.Key.DoAction(context, pair.Value);
+            }
         }
     }
     protected Context SetContext()
     {
-        Context context = new()
-        {
-            EnemyTransform = transform,
-            PlayerTransform = transform,
-            speed = speed
-        };
+        Context context = new Context();
+        context.EnemyTransform = this.transform;
+        context.PlayerTransform = Player.transform;
+        context.speed = this.speed;
         return context;
+    }
+
+    protected void onDamage(float damage)
+    {
+        this.hitPoint -= damage;
+    }
+
+    void Update()
+    {
+        if (hitPoint <= 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     ///NOTE: 以下サンドボックスパタン

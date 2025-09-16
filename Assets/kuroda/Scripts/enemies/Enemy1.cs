@@ -6,12 +6,14 @@ public class Enemy1 : EnemyBase
     void Start()
     {
         SetActions();
+        OnAction();
     }
     void SetActions()
     {
         Walk action1 = new Walk();
-        base.actions.Add(action1);
-        NullPo action2 = new NullPo();
-        base.actions.Add(action2);
+        actionDurationPairs.Add(action1, 5);
+        NullPo nullPo = new NullPo();
+        actionDurationPairs.Add(nullPo, 5);
     }
+
 }
