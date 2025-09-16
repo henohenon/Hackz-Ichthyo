@@ -9,17 +9,16 @@ namespace Player
     public sealed class Player : MonoBehaviour
     {
         [SerializeField] Input input_;
-
-        [SerializeField] private Health health_;
-        [SerializeField] private IQ singularityIq_;
-        [SerializeField] private SerializableReactiveProperty<IQ> iq_;
         [SerializeField] SuperComputer superComputer_;
 
-        [SerializeField] List<StateContextBase> stateContextBase_;
+        [SerializeField] private SerializableReactiveProperty<Health> health_;
+        [SerializeField] private IQ singularityIq_;
+        [SerializeField] private SerializableReactiveProperty<IQ> iq_;
+
+        [SerializeField] private List<StateContextBase> stateContextBase_;
         private readonly Dictionary<Type, IState> states_ = new();
         private IState state_;
 
-        public Health Health_ => health_;
         public ReadOnlyReactiveProperty<IQ> IQ => iq_;
 
         private void Awake()
@@ -87,5 +86,7 @@ namespace Player
 
             Debug.LogWarning($"Context of type {typeof(TContext).Name} not found.");
         }
+
+        public void OnDamage(int damage) => health_.OnNext(new Health(health_.Value.Value - damage));
     }
 }

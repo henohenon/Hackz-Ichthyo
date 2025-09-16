@@ -12,4 +12,6 @@ public struct Health
     {
         value_ = value;
     }
+
+    public readonly int Value => value_;
 }
