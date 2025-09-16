@@ -1,7 +1,8 @@
+using System.Threading.Tasks;
 using UnityEngine;
 public class Action3 : ActionBase
 {
-    public override void DoAction(Context context)
+    public override async Task DoAction(Context context, float? duration)
     {
 
     }
