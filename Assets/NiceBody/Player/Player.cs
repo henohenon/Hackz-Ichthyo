@@ -101,7 +101,7 @@ namespace Player
         public void OnDamage(int damage)
         {
             health_.OnNext(new Health(health_.Value.Value - damage));
-            UnityEngine.Debug.Log(health_.Value.Value);
+            Debug.Log(health_.Value.Value);
         }
     }
 }

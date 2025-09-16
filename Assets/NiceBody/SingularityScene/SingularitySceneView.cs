@@ -32,6 +32,7 @@ public sealed class SingularitySceneView
 
     public void OnCloseSelectLearnSkill()
     {
+        UnityEngine.Debug.Log("close canvas");
         onLearnSkillCanvas.enabled = false;
     }
 }

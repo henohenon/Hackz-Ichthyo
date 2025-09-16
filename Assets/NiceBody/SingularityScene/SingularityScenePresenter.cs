@@ -23,11 +23,12 @@ public sealed class SingularityScenePresenter : MonoBehaviour
             .ToList()
             .Select(ui => ui.OnClicked)
             .ToList()
-            .ForEach(onClicked =>
-            {
-                onClicked.Subscribe(player_.LearnedSkillGroup_.LearnSkill);
-                sceneView.OnCloseSelectLearnSkill();
-            });
+            .ForEach(onClicked => onClicked.Subscribe(_ =>
+                {
+                    player_.LearnedSkillGroup_.LearnSkill(_);
+                    sceneView.OnCloseSelectLearnSkill();
+                })
+            );
 
         // Health 表示更新
         player_.Health.Subscribe(health =>
