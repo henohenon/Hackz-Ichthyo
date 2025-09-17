@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using NiceBody.Player.LearnedSkill;
 using UnityEngine;
@@ -9,6 +10,7 @@ abstract public class EnemyBase : MonoBehaviour
     [SerializeField] private DeathEffect deathEffectPrefab;
     [SerializeField] protected float hitPoint, speed, attackPower;
     protected float attackInterval = 0.5f;
+    private float initHitpoint;
     private float nextAttackTime = 0f;
     [SerializeField] protected Player.Player player_;
 
@@ -17,10 +19,12 @@ abstract public class EnemyBase : MonoBehaviour
     public void Initialize(Player.Player player)
     {
         player_ = player;
+        hitPoint = initHitpoint;
     }
 
     protected async Task OnAction()
     {
+        if (!gameObject.activeSelf) return;
         Context context = SetContext();
         while (true)
         {
@@ -45,6 +49,7 @@ abstract public class EnemyBase : MonoBehaviour
 
     public void OnDamage(float damage)
     {
+        if (!gameObject.activeSelf) return;
         this.hitPoint -= damage;
 
         if (Helper.Instance != null)
@@ -60,6 +65,11 @@ abstract public class EnemyBase : MonoBehaviour
 
     abstract protected void SetActions();
 
+    private void Awake()
+    {
+        initHitpoint = hitPoint;
+    }
+
     void Start()
     {
         SetActions();
@@ -68,22 +78,26 @@ abstract public class EnemyBase : MonoBehaviour
 
     void Update()
     {
+        if (!gameObject.activeSelf) return;
         if (IsDeath())
         {
             Player.AddIQ(onDeathLearnAiIq_);
             var instance = Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
             instance.Initialize(onDeathLearnAiIq_.Value);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            player_ = null;
+            return;
+            // Destroy(gameObject);
         }
-        if (isPlayerInRange && Time.time >= nextAttackTime)
+        if (isPlayerInRange)
         {
             OnPlayerHit();
-            nextAttackTime = Time.time + attackInterval;
         }
     }
 
     protected void  OnTriggerEnter2D(Collider2D other)
     {
+        if (!gameObject.activeSelf) return;
         if (other.CompareTag("Player"))
         {
             isPlayerInRange = true;
@@ -91,6 +105,7 @@ abstract public class EnemyBase : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D other)
     {
+        if (!gameObject.activeSelf) return;
         // 出ていったのがPlayerかどうかTagで判定
         if (other.CompareTag("Player"))
         {

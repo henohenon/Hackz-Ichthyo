@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using NiceBody.Player.LearnedSkill;
+using UnityEngine.Serialization;
 
 
 namespace Player
@@ -19,8 +20,8 @@ namespace Player
         [SerializeField] private Animator animator_;
         [SerializeField] private LearnedSkillGroup learnedSkillGroup_;
 
-        [SerializeField] private Health maxHealth_;
-        [SerializeField] private SerializableReactiveProperty<Health> health_ = new(new Health(10));
+        private int maxHealth = 10;
+        [SerializeField] private SerializableReactiveProperty<int> health_ = new(10);
         [SerializeField] private IQ singularityIq_;
         [SerializeField] private SerializableReactiveProperty<IQ> iq_ = new();
 
@@ -29,8 +30,8 @@ namespace Player
         private readonly Dictionary<Type, IState> states_ = new();
         private IState state_;
 
-        public Health MaxHealth => maxHealth_;
-        public ReadOnlyReactiveProperty<Health> Health => health_;
+        public int MaxHealth => maxHealth;
+        public ReadOnlyReactiveProperty<int> Health => health_;
         public ReadOnlyReactiveProperty<IQ> IQ => iq_;
         public IQ SingularityIq_ => singularityIq_;
         public LearnedSkillGroup LearnedSkillGroup_ => learnedSkillGroup_;
@@ -123,11 +124,11 @@ namespace Player
         [Button]
         public void OnDamage(int damage)
         {
-            health_.OnNext(new Health(health_.Value.Value - damage));
-            Debug.Log("PlayerのHP: " + health_.Value.Value);
+            health_.OnNext(health_.Value - damage);
+            Debug.Log("PlayerのHP: " + health_.Value);
         }
 
-        private bool IsDeath() => health_.Value.Value <= 0;
+        private bool IsDeath() => health_.Value <= 0;
 
         private int killCount = 0;
         [SerializeField] private int[] skillUpKillCounts = {
@@ -144,11 +145,11 @@ namespace Player
             iq_.OnNext(iq_.Value + iq);
         }
 
-        private int getCounter()
+        public void Heal(int value)
         {
-            Enemy1 enemy1 = new Enemy1();
-            Enemy2 enemy2 = new Enemy2();
-            return enemy1.getNumber() + enemy2.getNumber();
+            health_.Value = Math.Clamp(health_.CurrentValue + value, 0, MaxHealth);
+
         }
+
     }
 }

@@ -5,9 +5,11 @@ using Unity.Jobs;
 using Unity.Burst;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Player.State;
 using R3;
+using Random = UnityEngine.Random;
 
 public sealed class WaveSystem : MonoBehaviour
 {
@@ -16,6 +18,17 @@ public sealed class WaveSystem : MonoBehaviour
     [SerializeField] private List<WaveData> waves_;
     [SerializeField] private List<EventBase> waveEvents_;
     [SerializeField] StartGame startGame_;
+    [SerializeField] private SerializedDictionary<EnemyType, EnemyBase[]> enemyPrefabs = new();
+
+    private Dictionary<EnemyType, List<EnemyBase>> enemyPool =
+        new Dictionary<EnemyType, List<EnemyBase>>
+    {
+
+        { EnemyType.Fighter, new() },
+        { EnemyType.Shooter, new() },
+        { EnemyType.Boss, new() }
+    
+    };
 
     private readonly CancellationTokenSource cts_ = new();
 
@@ -58,7 +71,19 @@ public sealed class WaveSystem : MonoBehaviour
                 // 敵召喚は必ず実行
                 foreach (var enemyData in wave.SummonEnemies)
                 {
-                    await SpawnEnemiesAsync(enemyData.GameObject_, enemyData.Count_, token);
+                    var activeEnemy = enemyPool[enemyData.Type].Where(e => !e.gameObject.activeSelf).ToList();
+                    var activeDiff = enemyData.Count - activeEnemy.Count;
+                    for (int i = 0; i < activeDiff; i++)
+                    {
+                        var prefabsArray = enemyPrefabs[enemyData.Type];
+                        var prefab = prefabsArray[Random.Range(0, prefabsArray.Length)];
+                        var instance = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+                        instance.gameObject.SetActive(false);
+
+                        enemyPool[enemyData.Type].Add(instance);
+                        activeEnemy.Add(instance);
+                    }
+                    await SpawnEnemiesAsync(activeEnemy, enemyData.Count, token);
                 }
 
                 await UniTask.Delay(TimeSpan.FromSeconds(wave.CooldownSeconds), cancellationToken: token);
@@ -105,19 +130,15 @@ public sealed class WaveSystem : MonoBehaviour
         }
     }
 
-    private async UniTask SpawnEnemiesAsync(GameObject prefab, int count, CancellationToken token)
+    private async UniTask SpawnEnemiesAsync(List<EnemyBase> objcts, int count, CancellationToken token)
     {
         NativeArray<Vector3> positions = new(count, Allocator.TempJob);
         NativeArray<uint> randomSeeds = new(count, Allocator.TempJob);
 
         try
         {
-            uint baseSeed = (uint)UnityEngine.Random.Range(1, int.MaxValue);
-            for (int i = 0; i < count; i++)
-            {
-                randomSeeds[i] = baseSeed + (uint)(i * 997);
-            }
-
+            uint baseSeed = (uint)Random.Range(1, int.MaxValue);
+            
             var job = new EnemySpawnPositionJob
             {
                 spawnRange = spawnEnemyDistsanceRange_,
@@ -125,7 +146,7 @@ public sealed class WaveSystem : MonoBehaviour
                 yRange = new Vector2(-3f, 3f),
                 playerPosition = player_.transform.position,
                 spawnPositions = positions,
-                randomSeeds = randomSeeds
+                seed = baseSeed
             };
 
             JobHandle handle = job.Schedule(count, 32);
@@ -134,19 +155,19 @@ public sealed class WaveSystem : MonoBehaviour
 
             for (int i = 0; i < count; i++)
             {
-                var enemy = Instantiate(prefab, positions[i], Quaternion.identity);
-                enemy.GetComponent<EnemyBase>().Initialize(player_);
+                var instance = objcts[i];
+                instance.transform.position = positions[i];
+                instance.Initialize(player_);
+                instance.gameObject.SetActive(true);
             }
-
-            Debug.Log($"Spawned {count} of {prefab.name}");
         }
         catch (OperationCanceledException)
         {
-            Debug.LogWarning($"Spawn canceled for {prefab.name}");
+            Debug.LogWarning($"Spawn canceled for"); //{obj.name}");
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Spawn error for {prefab.name}: {ex}");
+            Debug.LogError($"Spawn error for {ex}"); // {obj.name}: {ex}");
         }
         finally
         {
@@ -164,17 +185,27 @@ public sealed class WaveSystem : MonoBehaviour
         [ReadOnly] public Vector3 playerPosition;
 
         [WriteOnly] public NativeArray<Vector3> spawnPositions;
-        [ReadOnly] public NativeArray<uint> randomSeeds;
+        [ReadOnly] public uint seed;
 
         public void Execute(int index)
         {
-            var rand = new Unity.Mathematics.Random(randomSeeds[index]);
+            var rand = new Unity.Mathematics.Random(seed + (uint)index * 997);
 
-            float x = rand.NextFloat(xRange.x, xRange.y);
-            float y = rand.NextFloat(yRange.x, yRange.y);
-
-            Vector3 offset = new(x * spawnRange, y * spawnRange, 0f);
+            var x = rand.NextFloat(xRange.x, xRange.y);
+            var y = rand.NextFloat(yRange.x, yRange.y);
+            
+            var baseAngle =  rand.NextFloat(0f, 2f * Mathf.PI);
+            var offsetX = Mathf.Cos(baseAngle) * spawnRange + x;
+            var offsetY = Mathf.Sin(baseAngle) * spawnRange + y;
+            var offset = new Vector3(offsetX, offsetY, 0);
             spawnPositions[index] = playerPosition + offset;
         }
+    }
+    
+    public enum EnemyType
+    {
+        Fighter,
+        Shooter,
+        Boss
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class EnemyBoss : EnemyBase
@@ -10,12 +11,24 @@ public class EnemyBoss : EnemyBase
         actionDurationPairs.Add(action1, 5);
         Stop stop = new Stop();
         actionDurationPairs.Add(stop, null);
-        Teleport teleport = new Teleport();
-        actionDurationPairs.Add(teleport, null);
+        //Teleport teleport = new Teleport();
+        //actionDurationPairs.Add(teleport, null);
     }
+    private bool hitted = false;
+    private float hitCoolDown = 0.2f;
     override protected void OnPlayerHit()
     {
-        Debug.Log("敵ボスが当たってるよ");
+        if (hitted) return;
         player_.OnDamage((int)attackPower);
+        hitted = true;
+        HitCoolDown().Forget();
+        // Destroy(this.gameObject);
+    }
+
+    private async UniTaskVoid HitCoolDown()
+    {
+        await UniTask.Delay(TimeSpan.FromSeconds(hitCoolDown));
+        if (!gameObject.activeSelf) return;
+        hitted = false;
     }
 }

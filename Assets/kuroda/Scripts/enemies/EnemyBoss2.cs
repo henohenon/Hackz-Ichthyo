@@ -10,12 +10,12 @@ public class EnemyBoss2 : EnemyBase
         actionDurationPairs.Add(action1, 5);
         Stop stop = new Stop();
         actionDurationPairs.Add(stop, null);
-        USBSord uSBSord = new USBSord();
-        actionDurationPairs.Add(uSBSord, null);
+        //USBSord uSBSord = new USBSord();
+        //actionDurationPairs.Add(uSBSord, null);
     }
     override protected void OnPlayerHit()
     {
-        Debug.Log("敵ボス2が当たってるよ");
-        player_.OnDamage((int)attackPower);
+        // Debug.Log("敵ボス2が当たってるよ");
+        // player_.OnDamage((int)attackPower);
     }
 }

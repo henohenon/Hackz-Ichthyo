@@ -1,28 +1,32 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class Enemy2 : EnemyBase
 {
-    private static int counter = 0;
-
     override protected void SetActions()
     {
         Walk action1 = new Walk();
         actionDurationPairs.Add(action1, 5);
     }
+    private bool hitted = false;
+    private float hitCoolDown = 0.5f;
     override protected void OnPlayerHit()
     {
-        Debug.Log("敵2が当たってるよ");
+        if (!gameObject.activeSelf) return;
+        if (hitted) return;
+        hitted = true;
         player_.OnDamage((int)attackPower);
-        Destroy(this.gameObject);
+        HitCoolDown().Forget();
+        // Destroy(this.gameObject);
     }
-    void OnDestroy()
+
+    private async UniTaskVoid HitCoolDown()
     {
-        counter++;
+        await UniTask.Delay(TimeSpan.FromSeconds(hitCoolDown));
+        if (!gameObject.activeSelf) return;
+        hitted = false;
     }
-    public int getNumber()
-    {
-        return counter;
-    }
+
 }
