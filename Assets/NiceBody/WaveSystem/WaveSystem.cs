@@ -15,12 +15,15 @@ public sealed class WaveSystem : MonoBehaviour
     [SerializeField] private float spawnEnemyDistsanceRange_ = 1f;
     [SerializeField] private List<WaveData> waves_;
     [SerializeField] private List<EventBase> waveEvents_;
+    [SerializeField] StartGame startGame_;
 
-    private CancellationTokenSource cts_;
+    private readonly CancellationTokenSource cts_ = new();
 
-    private void Start()
+    private async void Start()
     {
-        cts_ = new CancellationTokenSource();
+        await startGame_.StartGameAsync();
+
+
         player_.GetState<DeathState>()
                .OnDeath
                .Subscribe(_ => 
@@ -65,10 +68,10 @@ public sealed class WaveSystem : MonoBehaviour
                     player_.IQ.CurrentValue < waves_[waveIndex + 1].RequiredIQ)
                 {
                     Debug.Log($"Waiting for IQ to reach {waves_[waveIndex + 1].RequiredIQ.Value} to start next wave.");
-                    continue; // IQが足りないので次のウェーブに進まない
+                    continue; 
                 }
 
-                waveIndex++; // IQ条件を満たしているので次へ
+                waveIndex++; 
             }
 
             Debug.Log("All waves completed!");
