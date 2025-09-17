@@ -14,6 +14,7 @@ public sealed class SingularitySceneView
     [SerializeField] List<SelectLearnSkillUI> selectLearnSkillUIs;
     [SerializeField] private Text needCalculateTime;
     [SerializeField] Slider healthSlider_;
+    [SerializeField] Canvas deathCanvas_;
 
     public Text NeedCalculateTime => needCalculateTime;
     public Slider HealthSlider => healthSlider_;
@@ -32,14 +33,7 @@ public sealed class SingularitySceneView
             .ForEach(pair => pair.ui.SetSkillInfo(pair.skill));
     }
 
-    public void AddLearnSkill(SkillBase learnSkill)
-    {
-        UnityEngine.Object.Instantiate(learnedSkillUISlotPrefab, skillSlotGroup).Icon.sprite = learnSkill.Icon;
-    }
-
-    public void OnCloseSelectLearnSkill()
-    {
-        UnityEngine.Debug.Log("close canvas");
-        onLearnSkillCanvas.enabled = false;
-    }
+    public void AddLearnSkill(SkillBase learnSkill) => UnityEngine.Object.Instantiate(learnedSkillUISlotPrefab, skillSlotGroup).Icon.sprite = learnSkill.Icon;
+    public void OnCloseSelectLearnSkill()   => onLearnSkillCanvas.enabled   = false;
+    public void OnEnableDeathCanvas()       =>  deathCanvas_.enabled        = true;
 }

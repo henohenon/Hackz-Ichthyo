@@ -39,6 +39,7 @@ namespace Player
             RegisterState<IdleState, IdleStateContext>();
             RegisterState<WalkState, WalkStateContext>();
             RegisterState<SingularitiedState, SingularitiedStateContext>();
+            RegisterState<DeathState, DeathStateContext>();
             OnChangeState(typeof(IdleState));
         }
 
@@ -101,6 +102,17 @@ namespace Player
             states_.Add(typeof(TState), state);
 
             Debug.LogWarning($"Context of type {typeof(TContext).Name} not found.");
+        }
+
+        public T GetState<T>() where T : class, IState
+        {
+            if (states_.TryGetValue(typeof(T), out var state))
+            {
+                return state as T;
+            }
+
+            Debug.LogWarning($"State of type {typeof(T).Name} is not registered.");
+            return null;
         }
 
         [Button]

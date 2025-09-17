@@ -12,7 +12,7 @@ public class Camera : MonoBehaviour
         if (target == null) 
             return;
 
-        Vector3 desiredPosition = new Vector3(target.position.x, target.position.y, offset.z);
+        Vector3 desiredPosition = new(target.position.x, target.position.y, offset.z);
         Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
         transform.position = smoothedPosition;
     }
