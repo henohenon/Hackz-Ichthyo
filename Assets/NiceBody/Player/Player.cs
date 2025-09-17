@@ -31,6 +31,7 @@ namespace Player
         public ReadOnlyReactiveProperty<IQ> IQ => iq_;
         public IQ SingularityIq_ => singularityIq_;
         public LearnedSkillGroup LearnedSkillGroup_ => learnedSkillGroup_;
+        public SuperComputer SuperComputer_ => superComputer_;
 
 
         private void Awake()
@@ -39,13 +40,14 @@ namespace Player
             RegisterState<IdleState, IdleStateContext>();
             RegisterState<WalkState, WalkStateContext>();
             RegisterState<SingularitiedState, SingularitiedStateContext>();
+            RegisterState<DeathState, DeathStateContext>();
             OnChangeState(typeof(IdleState));
         }
 
         private void Update()
         {
             state_?.OnUpdate();
-            superComputer_.Tick(iq_);
+            SuperComputer_.Tick(iq_);
 
             if (IQ.CurrentValue > SingularityIq_)
             {
@@ -53,10 +55,7 @@ namespace Player
             }
         }
 
-        public Input GetInput()
-        {
-            return input_;
-        }
+        public Input GetInput() => input_;
 
         public void OnChangeState(Type newType)
         {
@@ -103,6 +102,17 @@ namespace Player
             Debug.LogWarning($"Context of type {typeof(TContext).Name} not found.");
         }
 
+        public T GetState<T>() where T : class, IState
+        {
+            if (states_.TryGetValue(typeof(T), out var state))
+            {
+                return state as T;
+            }
+
+            Debug.LogWarning($"State of type {typeof(T).Name} is not registered.");
+            return null;
+        }
+
         [Button]
         public void OnDamage(int damage)
         {
@@ -110,13 +120,11 @@ namespace Player
             Debug.Log("PlayerのHP: " + health_.Value.Value);
         }
 
-        private bool IsDeath()
+        private bool IsDeath() => health_.Value.Value <= 0;
+
+        public void AddIQ(IQ iq)
         {
-            if (health_.Value.Value <= 0)
-            {
-                return true;
-            }
-            return false;
+            iq_.OnNext(iq_.Value + iq);
         }
     }
 }
