@@ -5,10 +5,15 @@ public class NullPoObject : MonoBehaviour
     public float speed = 2f; 
     private Rigidbody2D rb;
     private int attackPower = 2;
+    private int lifetime = 5;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+    }
+    void Start()
+    {
+        Destroy(gameObject, lifetime);
     }
 
     public void Launch(Vector2 direction)
@@ -25,7 +30,6 @@ public class NullPoObject : MonoBehaviour
             {
                 player.OnDamage(attackPower); 
             }
-
             Destroy(gameObject);
         }
     }
