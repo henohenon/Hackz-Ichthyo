@@ -17,7 +17,7 @@ namespace Player.State
         public override void OnUpdate()
         {
             Vector2 move = Input.Move.action.ReadValue<Vector2>();
-            Debug.Log(move);
+            // Debug.Log(move);
 
             Rigidbody.velocity = Context.MoveSpeed_ * move;
 

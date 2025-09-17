@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Context : MonoBehaviour
+public class Context
 {
     public Transform EnemyTransform { get; set; }
     public Transform PlayerTransform { get; set; }
@@ -10,5 +10,6 @@ public class Context : MonoBehaviour
     public Player.Input PlayerInput { get; set; }
     public SpriteRenderer EnemySpriteRenderer { get; set; }
     public MonoBehaviour CoroutineRunner { get; set; }
+    public Rigidbody2D EnemyRigidbody2D{ get; set; }
 
 }
