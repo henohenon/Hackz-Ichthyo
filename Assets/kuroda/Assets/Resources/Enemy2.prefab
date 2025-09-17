@@ -141,6 +141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e988405119f5a58448b4d36929437539, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onDeathLearnAiIq_:
+    value_: 10
   hitPoint: 10
   speed: 0.5
   attackPower: 0

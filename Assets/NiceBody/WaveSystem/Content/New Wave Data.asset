@@ -10,9 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92908dfe64e328e408c38ae61cb33b91, type: 3}
-  m_Name: Wave0 2
+  m_Name: New Wave Data
   m_EditorClassIdentifier: 
-  cooldown_secs: 10
-  summonEnemies:
-  - gameObject_: {fileID: 2246263132872098227, guid: 815cca5c9d783b140b776605784d910d, type: 3}
-    count_: 10
+  cooldown_secs: 0
+  summonEnemies: []

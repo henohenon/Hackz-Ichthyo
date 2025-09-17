@@ -108,8 +108,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dba11e2876592f244a8610aabb2d9bbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onDeathLearnAiIq_:
+    value_: 10
   hitPoint: 10
   speed: 1
+  attackPower: 0
   player_: {fileID: 0}
 --- !u!61 &-5294077699975083632
 BoxCollider2D:
