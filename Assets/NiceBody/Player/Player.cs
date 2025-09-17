@@ -37,6 +37,7 @@ namespace Player
         private void Awake()
         {
             input_.Init();
+            learnedSkillGroup_.Init(this);
             RegisterState<IdleState, IdleStateContext>();
             RegisterState<WalkState, WalkStateContext>();
             RegisterState<SingularitiedState, SingularitiedStateContext>();

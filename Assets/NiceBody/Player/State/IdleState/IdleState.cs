@@ -16,6 +16,8 @@ namespace Player.State
 
         public override void OnUpdate()
         {
+            Rigidbody.velocity = Vector2.zero;
+
             if (Input.Move.action.ReadValue<Vector2>() != Vector2.zero)
             {
                 OnChangeState<WalkState>();

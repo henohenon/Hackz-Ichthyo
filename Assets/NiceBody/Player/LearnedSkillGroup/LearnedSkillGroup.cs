@@ -22,6 +22,15 @@ namespace Player.Skill
 
         private readonly CancellationTokenSource skillLoopCts_ = new();
 
+        public void Init(Player player)
+        {
+            foreach (var learnedSkill in learnedSkills_)
+            {
+                var context = new SkillBase.UseSkillContext(player);
+                learnedSkill.LoopUseSkillAsync(context, skillLoopCts_.Token).Forget();
+            }
+        }
+
         public void SelectLearnSkill(SelectLernSkillGroup skill)
         {
             if (skill == null)
