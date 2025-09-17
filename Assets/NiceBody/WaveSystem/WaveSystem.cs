@@ -6,6 +6,8 @@ using Unity.Burst;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Player.State;
+using R3;
 
 public sealed class WaveSystem : MonoBehaviour
 {
@@ -19,6 +21,15 @@ public sealed class WaveSystem : MonoBehaviour
     private void Start()
     {
         cts_ = new CancellationTokenSource();
+        player_.GetState<DeathState>()
+               .OnDeath
+               .Subscribe(_ => 
+               {
+                   Debug.LogWarning("Player died. Cancelling wave system.");
+                   cts_.Cancel();
+               })
+               .AddTo(this);
+
         RunWavesAsync(cts_.Token).Forget();
         RunEventsAsync(cts_.Token).Forget();
     }

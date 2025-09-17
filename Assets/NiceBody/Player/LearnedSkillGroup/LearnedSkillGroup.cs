@@ -26,11 +26,13 @@ namespace Player.Skill
             if (skill == null)
                 return;
 
+            Time.timeScale = 0;
             onSelectLearnSkill.OnNext(skill);
         }
 
         public void LearnSkill(SkillBase skill)
         {
+            Time.timeScale = 1;
             if (skill == null)
                 return;
 
