@@ -13,6 +13,7 @@ public sealed class SingularityScenePresenter : MonoBehaviour
 
     private void Awake()
     {
+        Cursor.visible = false;
         // IQ 表示
         player_.IQ.Subscribe(iq => sceneView.NeedCalculateTime.text = "必要計算時間: " + GetIqLevel24Formatted(iq, player_.SingularityIq_));
 
@@ -34,7 +35,11 @@ public sealed class SingularityScenePresenter : MonoBehaviour
         // Health 表示更新
         player_.Health.Subscribe(health => sceneView.HealthSlider.value = GetNormalizedHealth(health.Value, player_.MaxHealth.Value)).AddTo(this);
         player_.LearnedSkillGroup_.OnLearnSkill.Subscribe(skill => sceneView.AddLearnSkill(skill.Skill)).AddTo(this);
-        player_.GetState<DeathState>().OnDeath.Subscribe(_ => sceneView.OnEnableDeathCanvas()).AddTo(this);
+        player_.GetState<DeathState>().OnDeath.Subscribe(_ =>
+        {
+            Cursor.visible = true;
+            sceneView.OnEnableDeathCanvas();
+        }).AddTo(this);
     }
 
     private float GetNormalizedHealth(int current, int max)

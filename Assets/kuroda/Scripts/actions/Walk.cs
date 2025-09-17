@@ -18,11 +18,6 @@ public class Walk : ActionBase
         {
             Vector2 direction = ((Vector2)context.PlayerTransform.position - (Vector2)context.EnemyTransform.position).normalized;
             rb.velocity = direction * context.speed;
-            // context.EnemyTransform.position = Vector3.MoveTowards(
-            //     context.EnemyTransform.position,
-            //     context.PlayerTransform.position,
-            //     context.speed * Time.deltaTime
-            // );
             elapsedTime += Time.deltaTime;
             await UniTask.Yield();
         }
