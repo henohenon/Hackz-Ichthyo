@@ -11,9 +11,9 @@ public sealed class ChatGPT : SkillBase
 
     [SerializeField] private ChatGptGradeProp[] grades =
     {
-        new ChatGptGradeProp(1, 1, 5, 1.5f),
-        new ChatGptGradeProp(2, 2, 3, 5),
-        new ChatGptGradeProp(3, 3, 1, 12),
+        new ChatGptGradeProp(1, 1, 5, 1.5f, 1),
+        new ChatGptGradeProp(2, 2, 3, 5, 2),
+        new ChatGptGradeProp(3, 3, 1, 12, 3),
     };
     
     public override void OnAction(UseSkillContext context, int level)
@@ -24,10 +24,12 @@ public sealed class ChatGPT : SkillBase
         CreateHexField(context.Player.transform.position, prop);
     }
 
-    private void CreateHexField(Vector3 center, ChatGptGradeProp props)
-    {
-        var offset = GetHexOffset(4);
-        InstantiateHexAOE(center + offset, props.Size, props.Damage, props.AttractionForce);
+    private void CreateHexField(Vector3 center, ChatGptGradeProp props) {
+        for(var i = 0; i < props.Count; i++)
+        {
+            var offset = GetHexOffset(4);
+            InstantiateHexAOE(center + offset, props.Size, props.Damage, props.AttractionForce);
+        }
     }
 
     private Vector3 GetHexOffset(float radius)
@@ -45,7 +47,7 @@ public sealed class ChatGPT : SkillBase
             return null;
         }
 
-        var aoe = GameObject.Instantiate(hexAOEPrefab, position, Quaternion.identity);
+        var aoe = Instantiate(hexAOEPrefab, position, Quaternion.identity);
         aoe.Initialize(size, damage, attractionForce);
         return aoe;
     }
@@ -62,17 +64,20 @@ public sealed class ChatGptGradeProp
     private float coolDown;
     [SerializeField]
     private float attractionForce;
+    [SerializeField] private int count;
     
-    public ChatGptGradeProp(float size, float damage, float coolDown, float attractionForce)
+    public ChatGptGradeProp(float size, float damage, float coolDown, float attractionForce, int count)
     {
         this.size = size;
         this.damage = damage;
         this.coolDown = coolDown;
         this.attractionForce = attractionForce;
+        this.count = count;
     }
     
     public float Size => size;
     public float Damage => damage;
     public float CoolDown => coolDown;
     public float AttractionForce => attractionForce;
+    public int Count => count;
 }

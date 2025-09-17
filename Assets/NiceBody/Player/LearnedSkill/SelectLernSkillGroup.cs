@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Player.Skill;
 using UnityEngine;
 
-namespace Player.Skill
+namespace NiceBody.Player.LearnedSkill
 {
     [Serializable]
     public sealed class SelectLernSkillGroup

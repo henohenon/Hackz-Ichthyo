@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NiceBody.Player.LearnedSkill;
 using UnityEngine;
 using UnityEngine.UI;
 

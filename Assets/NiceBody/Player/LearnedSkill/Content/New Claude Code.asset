@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3544114c1084dec8fcc598230d2533c, type: 3}
+  m_Name: New Claude Code
+  m_EditorClassIdentifier: 
+  icon_: {fileID: 0}
+  skillName_: Claude Code
+  skillDescription_: 
+  cooldown_secs_: 2
+  drawingDamagePrefab: {fileID: 1176535973315500161, guid: 623cb6bcc064ffc438b84ccce37fbe89, type: 3}
+  grades:
+  - size: 1
+    damage: 1
+    attractionForce: 0.1
+    moveSpeed: 2
+    lifeTime: 2
+    bombCount: 5
+    coolDown: 2
+  - size: 1.5
+    damage: 1.5
+    attractionForce: 0.13
+    moveSpeed: 3
+    lifeTime: 1
+    bombCount: 8
+    coolDown: 1
+  - size: 2
+    damage: 2.3
+    attractionForce: 0.16
+    moveSpeed: 4
+    lifeTime: 0.75
+    bombCount: 12
+    coolDown: 0.3
