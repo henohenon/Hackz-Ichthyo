@@ -13,11 +13,23 @@ public sealed class SingularitySceneView
     [SerializeField] RectTransform skillSlotGroup;
     [SerializeField] private Canvas onLearnSkillCanvas;
     [SerializeField] List<SelectLearnSkillUI> selectLearnSkillUIs;
-    [SerializeField] private Text needCalculateTime;
+    [SerializeField] private Text hourText;
+    [SerializeField] private Text minuteText;
+    [SerializeField] private Text secondsText;
+    [SerializeField] private Transform sliderMask;
     [SerializeField] Slider healthSlider_;
     [SerializeField] Canvas deathCanvas_;
 
-    public Text NeedCalculateTime => needCalculateTime;
+    public void SetSingularityTime(TimeSpan time, float progress)
+    {
+        hourText.text = time.Hours.ToString("00");
+        minuteText.text = time.Minutes.ToString("00");
+        secondsText.text = time.Seconds.ToString("00");
+        
+        sliderMask.localPosition = new Vector3(progress * 17.2f, 0, 0);
+    }
+    
+    
     public Slider HealthSlider => healthSlider_;
 
     public IReadOnlyCollection<SelectLearnSkillUI> SelectLearnSkillUIs => selectLearnSkillUIs;

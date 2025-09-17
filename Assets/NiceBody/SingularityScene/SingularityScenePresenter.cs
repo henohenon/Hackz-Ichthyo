@@ -15,7 +15,12 @@ public sealed class SingularityScenePresenter : MonoBehaviour
     {
         Cursor.visible = false;
         // IQ 表示
-        player_.IQ.Subscribe(iq => sceneView.NeedCalculateTime.text = "必要計算時間: " + GetIqLevel24Formatted(iq, player_.SingularityIq_));
+        player_.IQ.Subscribe(iq =>
+        {
+            var progress = GetIqProgress(iq, player_.SingularityIq_);
+            var time = GetProgressStamp(progress);
+            sceneView.SetSingularityTime(time, progress);
+        });
 
         // スキル選択表示
         player_.LearnedSkillGroup_.OnSelectLearnSkill.Subscribe(sceneView.OnOpenSelectLearnSkill).AddTo(this);
@@ -50,21 +55,24 @@ public sealed class SingularityScenePresenter : MonoBehaviour
         return Mathf.Clamp01((float)current / max);
     }
 
-    private string GetIqLevel24Formatted(IQ IQ, IQ SingularityIQ)
+    private float GetIqProgress(IQ IQ, IQ SingularityIQ)
     {
         if (SingularityIQ == null || SingularityIQ.Value == 0f)
-            return "24時間0分0秒";
+            return 1;
 
-        float current = IQ.Value;
-        float max = SingularityIQ.Value;
+        var current = IQ.Value;
+        var max = SingularityIQ.Value;
 
-        float progress = Mathf.Clamp01(current / max);
+        return Mathf.Clamp01(current / max);
+        
+    }
+
+    private TimeSpan GetProgressStamp(float progress)
+    {
         float remainingHours = (1f - progress) * 24f;
 
         // 時間を秒に変換して TimeSpan に渡す
         var totalSeconds = Mathf.RoundToInt(remainingHours * 3600f);
-        var timeSpan = TimeSpan.FromSeconds(totalSeconds);
-
-        return $"{timeSpan.Hours}時間{timeSpan.Minutes}分{timeSpan.Seconds}秒";
+        return TimeSpan.FromSeconds(totalSeconds);
     }
 }

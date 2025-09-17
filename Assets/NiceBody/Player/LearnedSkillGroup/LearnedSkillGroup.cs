@@ -37,12 +37,14 @@ namespace Player.Skill
                 return;
 
             Time.timeScale = 0;
+            Cursor.visible = true;
             onSelectLearnSkill.OnNext(selectSkillGroup);
         }
 
         public void LearnSkill(SkillBase skill)
         {
             Time.timeScale = 1;
+            Cursor.visible = false;
             if (skill == null)
                 return;
 
