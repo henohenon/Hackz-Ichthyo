@@ -6,10 +6,12 @@ abstract public class EnemyBase : MonoBehaviour
 {
     [SerializeField] private IQ onDeathLearnAiIq_;
     [SerializeField] protected float hitPoint, speed, attackPower;
-    [SerializeField] private Player.Player player_;
+    protected float attackInterval = 0.5f;
+    private float nextAttackTime = 0f;
+    [SerializeField] protected Player.Player player_;
 
     protected Dictionary<ActionBase, float?> actionDurationPairs = new Dictionary<ActionBase, float?>();
-
+    private bool isPlayerInRange = false;
     public void Initialize(Player.Player player)
     {
         player_ = player;
@@ -22,7 +24,6 @@ abstract public class EnemyBase : MonoBehaviour
         {
             foreach (KeyValuePair<ActionBase, float?> pair in actionDurationPairs)
             {
-                Debug.Log("pair.Key: " + pair.Key + "pair.Value: " + pair.Value);
                 await pair.Key.DoAction(context, pair.Value);
             }
         }
@@ -36,6 +37,7 @@ abstract public class EnemyBase : MonoBehaviour
         context.speed = this.speed;
         context.EnemySpriteRenderer = GetComponent<SpriteRenderer>();
         context.CoroutineRunner = this;
+        context.EnemyRigidbody2D = GetComponent<Rigidbody2D>();
         return context;
     }
 
@@ -69,12 +71,29 @@ abstract public class EnemyBase : MonoBehaviour
             Player.AddIQ(onDeathLearnAiIq_);
             Destroy(gameObject);
         }
-        if (Vector3.Distance(player_.transform.position, this.transform.position) < 0.2f)
+        if (isPlayerInRange && Time.time >= nextAttackTime)
         {
-            OnDamage(attackPower);
-            Destroy(gameObject);
+            OnPlayerHit();
+            nextAttackTime = Time.time + attackInterval;
         }
     }
+
+    protected void  OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isPlayerInRange = true;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        // 出ていったのがPlayerかどうかTagで判定
+        if (other.CompareTag("Player"))
+        {
+            isPlayerInRange = false;
+        }
+    }
+    abstract protected void OnPlayerHit();
 
     ///NOTE: 以下サンドボックスパタン
     protected Player.Player Player => player_;

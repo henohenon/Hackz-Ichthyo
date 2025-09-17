@@ -7,7 +7,7 @@ namespace Player.Skill
         [SerializeField] private Sprite icon_;
         [SerializeField] private string skillName_;
         [SerializeField] private string skillDescription_;
-        [SerializeField] private float cooldown_secs_;
+        [SerializeField] protected float cooldown_secs_;
 
         public Sprite Icon => icon_;
         public string SkillName => skillName_;
@@ -15,10 +15,7 @@ namespace Player.Skill
         public float Cooldown_secs_ => cooldown_secs_;  
 
 
-        public abstract void OnActionLevel1(UseSkillContext context);
-        public abstract void OnActionLevel2(UseSkillContext context);
-        public abstract void OnActionLevel3(UseSkillContext context);
-
+        public abstract void OnAction(UseSkillContext context, int level);
         public readonly struct UseSkillContext
         {
             private readonly Player player_;

@@ -29,13 +29,7 @@ namespace Player.Skill
         {
             while (!token.IsCancellationRequested)
             {
-                switch (level)
-                {
-                    case 1: skill.OnActionLevel1(context); break;
-                    case 2: skill.OnActionLevel2(context); break;
-                    case 3: skill.OnActionLevel3(context); break;
-                }
-
+                skill.OnAction(context, level);
                 await UniTask.Delay(TimeSpan.FromSeconds(skill.Cooldown_secs_), cancellationToken: token);
             }
         }
