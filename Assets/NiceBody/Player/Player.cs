@@ -120,7 +120,14 @@ namespace Player
             Debug.Log(health_.Value.Value);
         }
 
-        private bool IsDeath() => health_.Value.Value <= 0;
+        private bool IsDeath()
+        {
+            if (health_.Value.Value <= 0)
+            {
+                return true;
+            }
+            return false;
+        }
 
         public void AddIQ(IQ iq)
         {
