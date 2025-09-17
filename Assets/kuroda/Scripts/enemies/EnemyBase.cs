@@ -66,7 +66,7 @@ abstract public class EnemyBase : MonoBehaviour
         }
         if (Vector3.Distance(player_.transform.position, this.transform.position) < 0.2f)
         {
-            onDamage(attackPower);
+            OnDamage(attackPower);
             Destroy(this.gameObject);
         }
     }
