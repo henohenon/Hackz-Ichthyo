@@ -4,7 +4,7 @@ using UnityEngine;
 
 abstract public class EnemyBase : MonoBehaviour
 {
-    [SerializeField] protected float hitPoint, speed;
+    [SerializeField] protected float hitPoint, speed, attackPower;
     [SerializeField] private Player.Player player_;
     protected Dictionary<ActionBase, float?> actionDurationPairs = new Dictionary<ActionBase, float?>();
 
@@ -30,7 +30,10 @@ abstract public class EnemyBase : MonoBehaviour
         Context context = new Context();
         context.EnemyTransform = this.transform;
         context.PlayerTransform = Player.transform;
+        context.PlayerInput = Player.GetInput();
         context.speed = this.speed;
+        context.EnemySpriteRenderer = GetComponent<SpriteRenderer>();
+        context.CoroutineRunner = this;
         return context;
     }
 
@@ -50,6 +53,11 @@ abstract public class EnemyBase : MonoBehaviour
     {
         if (hitPoint <= 0)
         {
+            Destroy(this.gameObject);
+        }
+        if (Vector3.Distance(player_.transform.position, this.transform.position) < 0.2f)
+        {
+            onDamage(attackPower);
             Destroy(this.gameObject);
         }
     }
