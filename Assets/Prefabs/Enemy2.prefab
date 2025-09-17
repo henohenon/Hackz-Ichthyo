@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 1380706185618411067}
   - component: {fileID: 5929429088426093604}
   - component: {fileID: 8211943562650697402}
-  - component: {fileID: 5299706718371967607}
   - component: {fileID: -5294077699975083632}
   - component: {fileID: -3625740506224906845}
+  - component: {fileID: 60649942816384241}
   m_Layer: 0
   m_Name: Enemy2
   m_TagString: Untagged
@@ -96,25 +96,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5299706718371967607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5021079513498498174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dba11e2876592f244a8610aabb2d9bbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onDeathLearnAiIq_:
-    value_: 10
-  deathEffectPrefab: {fileID: 3444345840122618957, guid: 8758dadf244444b4a873c87ca1bc6e6d, type: 3}
-  hitPoint: 10
-  speed: 0.8
-  attackPower: 1
-  player_: {fileID: 0}
 --- !u!61 &-5294077699975083632
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -187,3 +168,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &60649942816384241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5021079513498498174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e988405119f5a58448b4d36929437539, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onDeathLearnAiIq_:
+    value_: 0
+  deathEffectPrefab: {fileID: 3444345840122618957, guid: 8758dadf244444b4a873c87ca1bc6e6d, type: 3}
+  hitPoint: 1
+  speed: 1
+  attackPower: 1
+  player_: {fileID: 0}

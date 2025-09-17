@@ -9,7 +9,7 @@ namespace Player.Skill
     public sealed class LearnedSkill
     {
         [SerializeField] SkillBase skill;
-        [SerializeField, Range(0, 3)] int level;
+        [SerializeField] int level;
 
         public LearnedSkill(SkillBase skill, int level)
         {
@@ -22,7 +22,7 @@ namespace Player.Skill
 
         public void LevelUp()
         {
-            level = Mathf.Clamp(level + 1, 0, 3);
+            level = Mathf.Clamp(level + 1, 0, 8);
         }
 
         public async UniTaskVoid LoopUseSkillAsync(SkillBase.UseSkillContext context, CancellationToken token)

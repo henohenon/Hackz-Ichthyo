@@ -97,6 +97,8 @@ abstract public class EnemyBase : MonoBehaviour
             isPlayerInRange = false;
         }
     }
+
+
     abstract protected void OnPlayerHit();
 
     ///NOTE: 以下サンドボックスパタン

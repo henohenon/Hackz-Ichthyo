@@ -4,11 +4,14 @@ public sealed class GeminiBullet : MonoBehaviour
     private float speed_;
     private int damage_;
     private float lifetime_ = 5f;
+    private int pierceCount_;
 
-    public void Initialize(float speed, int damage)
+    public void Initialize(float speed, int damage, float lifeTime, int pierceCount)
     {
         speed_ = speed;
         damage_ = damage;
+        lifetime_ = lifeTime;
+        pierceCount_ = pierceCount;
         Destroy(gameObject, lifetime_);
     }
     private void Update()
@@ -25,6 +28,10 @@ public sealed class GeminiBullet : MonoBehaviour
             return;
         }
         enemy.OnDamage(damage_);
-        Destroy(gameObject);
+        pierceCount_--;
+        if (pierceCount_ < 0)
+        {
+            Destroy(gameObject);
+        }
     }
 }

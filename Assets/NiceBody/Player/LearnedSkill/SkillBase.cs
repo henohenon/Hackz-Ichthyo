@@ -13,6 +13,7 @@ namespace Player.Skill
         public string SkillName => skillName_;
         public string SkillDescription => skillDescription_;
         public float Cooldown_secs_ => cooldown_secs_;  
+        public virtual int MaxLevel => 1;
 
 
         public abstract void OnAction(UseSkillContext context, int level);
