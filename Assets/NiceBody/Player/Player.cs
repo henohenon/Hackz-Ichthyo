@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using NiceBody.Player.LearnedSkill;
+
 
 namespace Player
 {
@@ -23,6 +25,7 @@ namespace Player
         [SerializeField] private SerializableReactiveProperty<IQ> iq_ = new();
 
         [SerializeField] private List<StateContextBase> stateContextBase_;
+        [SerializeField] private List<SelectLernSkillGroup> skills;
         private readonly Dictionary<Type, IState> states_ = new();
         private IState state_;
 
@@ -32,7 +35,6 @@ namespace Player
         public IQ SingularityIq_ => singularityIq_;
         public LearnedSkillGroup LearnedSkillGroup_ => learnedSkillGroup_;
         public SuperComputer SuperComputer_ => superComputer_;
-
 
         private void Awake()
         {
@@ -127,9 +129,26 @@ namespace Player
 
         private bool IsDeath() => health_.Value.Value <= 0;
 
+        private int killCount = 0;
+        [SerializeField] private int[] skillUpKillCounts = {
+            5, 12, 22, 30, 43, 55, 60, 100
+        };
         public void AddIQ(IQ iq)
         {
+            killCount++;
+            if(Array.IndexOf(skillUpKillCounts, killCount) != -1)
+            {
+                learnedSkillGroup_.SelectLearnSkill();
+            }
+
             iq_.OnNext(iq_.Value + iq);
+        }
+
+        private int getCounter()
+        {
+            Enemy1 enemy1 = new Enemy1();
+            Enemy2 enemy2 = new Enemy2();
+            return enemy1.getNumber() + enemy2.getNumber();
         }
     }
 }

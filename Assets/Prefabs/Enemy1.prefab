@@ -112,7 +112,7 @@ MonoBehaviour:
     value_: 10
   deathEffectPrefab: {fileID: 3444345840122618957, guid: 8758dadf244444b4a873c87ca1bc6e6d, type: 3}
   hitPoint: 10
-  speed: 1
+  speed: 0.8
   attackPower: 0
   player_: {fileID: 0}
 --- !u!61 &-5294077699975083632

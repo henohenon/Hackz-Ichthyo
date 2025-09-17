@@ -31,13 +31,13 @@ namespace Player.Skill
             }
         }
 
-        public void SelectLearnSkill(SelectLernSkillGroup skill)
+        public void SelectLearnSkill()
         {
-            if (skill == null)
+            if (selectSkillGroup == null)
                 return;
 
             Time.timeScale = 0;
-            onSelectLearnSkill.OnNext(skill);
+            onSelectLearnSkill.OnNext(selectSkillGroup);
         }
 
         public void LearnSkill(SkillBase skill)
@@ -64,14 +64,14 @@ namespace Player.Skill
                 existing.LevelUp();
             }
         }
+        [SerializeField] private SelectLernSkillGroup selectSkillGroup;
 
 #if UNITY_EDITOR
-        [SerializeField] private SelectLernSkillGroup selectSkillGroup;
 
         [Button]
         private void SelectLearnSkillButton()
         {
-            SelectLearnSkill(selectSkillGroup);
+            SelectLearnSkill();
         }
 #endif
     }

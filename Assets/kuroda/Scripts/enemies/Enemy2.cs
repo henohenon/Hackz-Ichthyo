@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Enemy2 : EnemyBase
 {
+    private static int counter = 0;
+
     override protected void SetActions()
     {
         Walk action1 = new Walk();
@@ -14,5 +16,13 @@ public class Enemy2 : EnemyBase
         Debug.Log("敵2が当たってるよ");
         player_.OnDamage((int)attackPower);
         Destroy(this.gameObject);
+    }
+    void OnDestroy()
+    {
+        counter++;
+    }
+    public int getNumber()
+    {
+        return counter;
     }
 }

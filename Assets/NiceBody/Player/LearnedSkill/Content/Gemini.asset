@@ -12,12 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb66d4e55ebd4cd4caa88c1005816d98, type: 3}
   m_Name: Gemini
   m_EditorClassIdentifier: 
-  icon_: {fileID: 0}
-  skillName_: 
-  skillDescription_: 
-  cooldown_secs_: 0
-  projectilePrefab_: {fileID: 0}
-  damage_: 10
-  projectileSpeed_: 15
-  projectileCount_: 5
-  spreadAngle_: 25
+  icon_: {fileID: 21300000, guid: a3fb329bada6c164ebd658822f8179d3, type: 3}
+  skillName_: Gemini Ball
+  skillDescription_: "Gemini\u306E\u30DC\u30FC\u30EB\u3092\u653E\u3061\u307E\u3059"
+  cooldown_secs_: 3
+  projectilePrefab_: {fileID: 2864682943723597622, guid: e3443cdcfad243f4f8017cb57c505d9f, type: 3}

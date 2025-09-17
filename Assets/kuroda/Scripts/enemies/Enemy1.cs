@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Enemy1 : EnemyBase
 {
+    private static int counter = 0;
 
     override protected void SetActions()
     {
@@ -17,5 +18,15 @@ public class Enemy1 : EnemyBase
         Debug.Log("敵1が当たってるよ");
         player_.OnDamage((int)attackPower);
         Destroy(this.gameObject);
+    }
+
+    void OnDestroy()
+    {
+        counter++;
+    }
+
+    public int getNumber()
+    {
+        return counter;
     }
 }
