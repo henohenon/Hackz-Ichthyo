@@ -67,7 +67,7 @@ namespace Player
             }
 
             Type previousType = state_?.GetType();
-            Debug.Log($"Changing state from {previousType?.Name ?? "None"} to {newType.Name}");
+            // Debug.Log($"Changing state from {previousType?.Name ?? "None"} to {newType.Name}");
 
             if (states_.TryGetValue(newType, out var newState))
             {
@@ -84,7 +84,7 @@ namespace Player
         private void RegisterState<TState, TContext>() where TState : IState where TContext : StateContextBase
         {
             var matchedContext = stateContextBase_.OfType<TContext>().FirstOrDefault();
-            if (matchedContext == null) 
+            if (matchedContext == null)
                 return;
 
             var state = (IState)Activator.CreateInstance(
@@ -107,7 +107,7 @@ namespace Player
         public void OnDamage(int damage)
         {
             health_.OnNext(new Health(health_.Value.Value - damage));
-            Debug.Log(health_.Value.Value);
+            Debug.Log("PlayerのHP: " + health_.Value.Value);
         }
 
         private bool IsDeath()
