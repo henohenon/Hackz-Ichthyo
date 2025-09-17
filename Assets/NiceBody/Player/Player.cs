@@ -53,6 +53,11 @@ namespace Player
             }
         }
 
+        public Input GetInput()
+        {
+            return input_;
+        }
+
         public void OnChangeState(Type newType)
         {
             if (!typeof(IState).IsAssignableFrom(newType))

@@ -7,8 +7,10 @@ public class Enemy2 : EnemyBase
     {
         Walk action1 = new Walk();
         actionDurationPairs.Add(action1, 5);
-        NullPo nullPo = new NullPo();
-        actionDurationPairs.Add(nullPo, 5);
+        Stop stop = new Stop();
+        actionDurationPairs.Add(stop, null);
+        Teleport teleport = new Teleport();
+        actionDurationPairs.Add(teleport, null);
     }
 
 }
