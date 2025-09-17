@@ -39,24 +39,19 @@ public sealed class WaveSystem : MonoBehaviour
             {
                 var wave = waves_[waveIndex];
 
-                if (player_.IQ.CurrentValue < wave.RequiredIQ.Value)
+                if (player_.IQ.CurrentValue < waves_[waveIndex + 1].RequiredIQ)
                 {
-                    Debug.Log($"Waiting for IQ to reach {wave.RequiredIQ.Value} to start wave {wave.name}. Current IQ: {player_.IQ.Value}");
-                    await UniTask.Yield(); // 毎フレーム待機（他の処理をブロックしない）
-                    continue; // インデックスを進めず、同じWaveを再評価
+                    Debug.Log($"Waiting for IQ to reach {wave.RequiredIQ.Value} to start wave {wave.name}. Current IQ: {player_.IQ.CurrentValue}");
+                    foreach (var enemyData in wave.SummonEnemies)
+                    {
+                        await SpawnEnemiesAsync(enemyData.GameObject_, enemyData.Count_, token);
+                    }
+
+                    await UniTask.Delay(TimeSpan.FromSeconds(wave.CooldownSeconds), cancellationToken: token);
+                    continue;
                 }
 
-                Debug.Log($"Wave Start: {wave.name}");
-
-                foreach (var enemyData in wave.SummonEnemies)
-                {
-                    await SpawnEnemiesAsync(enemyData.GameObject_, enemyData.Count_, token);
-                }
-
-                Debug.Log($"Wave End: {wave.name}");
-                await UniTask.Delay(TimeSpan.FromSeconds(wave.CooldownSeconds), cancellationToken: token);
-
-                waveIndex++; // IQ条件を満たしたので次のWaveへ
+                waveIndex++;
             }
 
             Debug.Log("All waves completed!");
