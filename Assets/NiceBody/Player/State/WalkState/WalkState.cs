@@ -13,13 +13,13 @@ namespace Player.State
         {
             Animator.Walk();
         }
-            
+
         public override void OnUpdate()
         {
             Vector2 move = Input.Move.action.ReadValue<Vector2>();
             Debug.Log(move);
 
-            Rigidbody.velocity = Context.MoveSpeed_ * move;
+            Rigidbody.velocity = Context.MoveSpeed_ * Time.deltaTime * move;
 
             if (move.x != 0)
             {

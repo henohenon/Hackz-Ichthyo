@@ -5,7 +5,6 @@ using Unity.Jobs;
 using Unity.Burst;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
 public sealed class WaveSystem : MonoBehaviour
 {
@@ -14,117 +13,74 @@ public sealed class WaveSystem : MonoBehaviour
     [SerializeField] private List<WaveData> waves_;
     [SerializeField] private List<EventBase> waveEvents_;
 
-    private CancellationTokenSource cts_;
-
     private void Start()
     {
-        cts_ = new CancellationTokenSource();
-        RunWavesAsync(cts_.Token).Forget();
-        RunEventsAsync(cts_.Token).Forget();
+        RunWavesAsync().Forget();
+        RunEventsAsync().Forget();
     }
 
-    private void OnDestroy()
+    private async UniTaskVoid RunWavesAsync()
     {
-        cts_?.Cancel();
-        cts_?.Dispose();
-    }
-
-    private async UniTaskVoid RunWavesAsync(CancellationToken token)
-    {
-        try
+        foreach (var wave in waves_)
         {
-            foreach (var wave in waves_)
+            Debug.Log($"Wave Start: {wave.name}");
+
+            foreach (var enemyData in wave.SummonEnemies)
             {
-                Debug.Log($"Wave Start: {wave.name}");
-
-                foreach (var enemyData in wave.SummonEnemies)
-                {
-                    await SpawnEnemiesAsync(enemyData.GameObject_, enemyData.Count_, token);
-                }
-
-                Debug.Log($"Wave End: {wave.name}");
-                await UniTask.Delay(TimeSpan.FromSeconds(wave.CooldownSeconds), cancellationToken: token);
+                await SpawnEnemiesAsync(enemyData.GameObject_, enemyData.Count_);
             }
 
-            Debug.Log("All waves completed!");
+            Debug.Log($"Wave End: {wave.name}");
+            await UniTask.Delay(TimeSpan.FromSeconds(wave.CooldownSeconds));
         }
-        catch (OperationCanceledException)
-        {
-            Debug.LogWarning("Wave execution canceled.");
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Wave execution error: {ex}");
-        }
+
+        Debug.Log("All waves completed!");
     }
 
-    private async UniTaskVoid RunEventsAsync(CancellationToken token)
+    private async UniTaskVoid RunEventsAsync()
     {
-        try
+        foreach (var evt in waveEvents_)
         {
-            foreach (var evt in waveEvents_)
-            {
-                await evt.ExecuteAsync(this).AttachExternalCancellation(token);
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            Debug.LogWarning("Wave events canceled.");
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Wave event error: {ex}");
+            await evt.ExecuteAsync(this);
         }
     }
 
-    private async UniTask SpawnEnemiesAsync(GameObject prefab, int count, CancellationToken token)
+    private async UniTask SpawnEnemiesAsync(GameObject prefab, int count)
     {
         NativeArray<Vector3> positions = new(count, Allocator.TempJob);
         NativeArray<uint> randomSeeds = new(count, Allocator.TempJob);
 
-        try
+        // シード生成（適度に分散させる）
+        uint baseSeed = (uint)UnityEngine.Random.Range(1, int.MaxValue);
+        for (int i = 0; i < count; i++)
         {
-            uint baseSeed = (uint)UnityEngine.Random.Range(1, int.MaxValue);
-            for (int i = 0; i < count; i++)
-            {
-                randomSeeds[i] = baseSeed + (uint)(i * 997);
-            }
-
-            var job = new EnemySpawnPositionJob
-            {
-                spawnRange = spawnEnemyDistsanceRange_,
-                xRange = new Vector2(-5f, 5f),
-                yRange = new Vector2(-3f, 3f),
-                playerPosition = player_.transform.position,
-                spawnPositions = positions,
-                randomSeeds = randomSeeds
-            };
-
-            JobHandle handle = job.Schedule(count, 32);
-            await UniTask.WaitUntil(() => handle.IsCompleted, cancellationToken: token);
-            handle.Complete();
-
-            for (int i = 0; i < count; i++)
-            {
-                var enemy = Instantiate(prefab, positions[i], Quaternion.identity);
-                enemy.GetComponent<EnemyBase>().Initialize(player_);
-            }
-
-            Debug.Log($"Spawned {count} of {prefab.name}");
+            randomSeeds[i] = baseSeed + (uint)(i * 997); // 997 は素数で分散性を高める
         }
-        catch (OperationCanceledException)
+
+        var job = new EnemySpawnPositionJob
         {
-            Debug.LogWarning($"Spawn canceled for {prefab.name}");
-        }
-        catch (Exception ex)
+            spawnRange = spawnEnemyDistsanceRange_,
+            xRange = new Vector2(-5f, 5f),
+            yRange = new Vector2(-3f, 3f),
+            playerPosition = player_.transform.position,
+            spawnPositions = positions,
+            randomSeeds = randomSeeds
+        };
+
+        JobHandle handle = job.Schedule(count, 32);
+        await UniTask.WaitUntil(() => handle.IsCompleted);
+        handle.Complete();
+
+        for (int i = 0; i < count; i++)
         {
-            Debug.LogError($"Spawn error for {prefab.name}: {ex}");
+            var enemy = Instantiate(prefab, positions[i], Quaternion.identity);
+            enemy.GetComponent<EnemyBase>().Initialize(player_);
         }
-        finally
-        {
-            if (positions.IsCreated) positions.Dispose();
-            if (randomSeeds.IsCreated) randomSeeds.Dispose();
-        }
+
+        positions.Dispose();
+        randomSeeds.Dispose();
+
+        Debug.Log($"Spawned {count} of {prefab.name}");
     }
 
     [BurstCompile]
@@ -136,6 +92,7 @@ public sealed class WaveSystem : MonoBehaviour
         [ReadOnly] public Vector3 playerPosition;
 
         [WriteOnly] public NativeArray<Vector3> spawnPositions;
+
         [ReadOnly] public NativeArray<uint> randomSeeds;
 
         public void Execute(int index)
