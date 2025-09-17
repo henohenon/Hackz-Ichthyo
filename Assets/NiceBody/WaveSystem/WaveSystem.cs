@@ -62,7 +62,11 @@ public sealed class WaveSystem : MonoBehaviour
                     continue;
                 }
 
-                waveIndex++;
+                if (waveIndex + 1 < waves_.Count)
+                {
+                    waveIndex++;
+                    await UniTask.Delay(TimeSpan.FromSeconds(wave.CooldownSeconds), cancellationToken: token);
+                }
             }
 
             Debug.Log("All waves completed!");
