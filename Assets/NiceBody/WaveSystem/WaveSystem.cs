@@ -6,6 +6,8 @@ using Unity.Burst;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Player.State;
+using R3;
 
 public sealed class WaveSystem : MonoBehaviour
 {
@@ -19,6 +21,15 @@ public sealed class WaveSystem : MonoBehaviour
     private void Start()
     {
         cts_ = new CancellationTokenSource();
+        player_.GetState<DeathState>()
+               .OnDeath
+               .Subscribe(_ => 
+               {
+                   Debug.LogWarning("Player died. Cancelling wave system.");
+                   cts_.Cancel();
+               })
+               .AddTo(this);
+
         RunWavesAsync(cts_.Token).Forget();
         RunEventsAsync(cts_.Token).Forget();
     }
@@ -33,17 +44,25 @@ public sealed class WaveSystem : MonoBehaviour
     {
         try
         {
-            foreach (var wave in waves_)
-            {
-                Debug.Log($"Wave Start: {wave.name}");
+            int waveIndex = 0;
 
-                foreach (var enemyData in wave.SummonEnemies)
+            while (waveIndex < waves_.Count)
+            {
+                var wave = waves_[waveIndex];
+
+                if (player_.IQ.CurrentValue < waves_[waveIndex + 1].RequiredIQ)
                 {
-                    await SpawnEnemiesAsync(enemyData.GameObject_, enemyData.Count_, token);
+                    Debug.Log($"Waiting for IQ to reach {wave.RequiredIQ.Value} to start wave {wave.name}. Current IQ: {player_.IQ.CurrentValue}");
+                    foreach (var enemyData in wave.SummonEnemies)
+                    {
+                        await SpawnEnemiesAsync(enemyData.GameObject_, enemyData.Count_, token);
+                    }
+
+                    await UniTask.Delay(TimeSpan.FromSeconds(wave.CooldownSeconds), cancellationToken: token);
+                    continue;
                 }
 
-                Debug.Log($"Wave End: {wave.name}");
-                await UniTask.Delay(TimeSpan.FromSeconds(wave.CooldownSeconds), cancellationToken: token);
+                waveIndex++;
             }
 
             Debug.Log("All waves completed!");

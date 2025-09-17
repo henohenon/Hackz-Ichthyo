@@ -3,7 +3,7 @@ using UnityEngine;
 public class Teleport : ActionBase
 {
     // プレイヤーからどれだけ前に出現するかの距離
-    public float offsetDistance = 3f;
+    public float offsetDistance = 5f;
     public override async Task DoAction(Context context, float? duration)
     {        // プレイヤーの位置を取得
         Vector3 playerPos = context.PlayerTransform.position;

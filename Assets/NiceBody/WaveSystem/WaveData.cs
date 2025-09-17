@@ -6,15 +6,18 @@ using UnityEngine;
 public sealed class WaveData : ScriptableObject
 {
     [SerializeField] private float cooldown_secs;
+    [SerializeField] private IQ requiredIQ_;
     [SerializeField] List<SpawnEnemyData> summonEnemies;
 
     public IReadOnlyCollection<SpawnEnemyData> SummonEnemies => summonEnemies;
+    public IQ RequiredIQ => requiredIQ_;
     public float CooldownSeconds => cooldown_secs;
+
 
     [Serializable]
     public sealed class SpawnEnemyData
     {
-        [SerializeField] GameObject gameObject_;
+        [SerializeField] private GameObject gameObject_;
         [SerializeField] private int count_;
 
         public GameObject GameObject_ => gameObject_;

@@ -10,62 +10,20 @@ public class NullPo : ActionBase
     private float NullPoSpeed = 2f;
     public override async Task DoAction(Context context, float? duration)
     {
-        Debug.Log("NullPoするよ");
-        // テキストをplayerに向けて発射する
-        GameObject gameObject = CreateTextObject(context);
-        if (gameObject == null)
-        {
-            return;
-        }
-        MoveNullObject(context, gameObject);
-        return;
-    }
-
-    private GameObject CreateTextObject(Context context)
-    {
         nullPoPrefab = Resources.Load<GameObject>("NullPoPrefab");
         if (nullPoPrefab == null)
         {
             Debug.LogError("Resourcesフォルダに'NullPoPrefab'が見つかりません");
-            return null;
+            return;
         }
+        GameObject instance = Object.Instantiate(nullPoPrefab, context.EnemyTransform.position, Quaternion.identity);
 
-        // canvasがあるかチェック
-        Canvas canvas = Object.FindObjectOfType<Canvas>();
-        if (canvas == null)
+        // 生成したオブジェクトにアタッチされているNullPoProjectileスクリプトを取得
+        NullPoObject nullPoObject = instance.GetComponent<NullPoObject>();
+        if (nullPoObject != null)
         {
-            Debug.LogError("シーンにCanvasがありません");
-            return null;
-        }
-        // canvasがあるかチェック
-        // PrefabをCanvasの子要素として生成
-        GameObject instance = Object.Instantiate(nullPoPrefab, canvas.transform);
-
-        // 生成したオブジェクトの初期位置を敵の位置に設定
-        instance.transform.position = context.EnemyTransform.position;
-
-        return instance;
-    }
-
-    private async Task MoveNullObject(Context context, GameObject gameObject)
-    {
-        while (gameObject != null)
-        {
-            if (Vector3.Distance(gameObject.transform.position, context.PlayerTransform.position) < 0.1f)
-            {
-                break;
-            }
-            gameObject.transform.position = Vector3.MoveTowards(
-                gameObject.transform.position,
-                context.PlayerTransform.position,
-                NullPoSpeed * Time.deltaTime
-            );
-            await UniTask.Yield();
-        }
-        if (gameObject != null)
-        {
-            // ここでplayerのonDamage()を呼び出してください
-            Object.Destroy(gameObject);
+            Vector2 direction = context.PlayerTransform.position - context.EnemyTransform.position;
+            nullPoObject.Launch(direction);
         }
     }
 }
