@@ -3,7 +3,9 @@ guid: 0542e64f348023e449dbb034a62fbf88
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - deathEffectPrefab: {fileID: 3444345840122618957, guid: 8758dadf244444b4a873c87ca1bc6e6d, type: 3}
+  - player_: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

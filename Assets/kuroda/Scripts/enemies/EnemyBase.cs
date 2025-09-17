@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using NiceBody.Player.LearnedSkill;
 using UnityEngine;
 
 abstract public class EnemyBase : MonoBehaviour
 {
     [SerializeField] private IQ onDeathLearnAiIq_;
+    [SerializeField] private DeathEffect deathEffectPrefab;
     [SerializeField] protected float hitPoint, speed, attackPower;
     protected float attackInterval = 0.5f;
     private float nextAttackTime = 0f;
@@ -69,6 +71,8 @@ abstract public class EnemyBase : MonoBehaviour
         if (IsDeath())
         {
             Player.AddIQ(onDeathLearnAiIq_);
+            var instance = Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
+            instance.Initialize(onDeathLearnAiIq_.Value);
             Destroy(gameObject);
         }
         if (isPlayerInRange && Time.time >= nextAttackTime)

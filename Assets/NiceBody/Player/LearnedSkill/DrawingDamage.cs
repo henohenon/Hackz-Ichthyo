@@ -34,6 +34,7 @@ namespace Player
             target *= Quaternion.Euler(0, 0, Random.Range(-100, 100));
             _handle.TryComplete();
             _handle = LMotion.Create(transform.rotation, target, Random.Range(0.05f, 1.2f)).WithOnComplete(() => Rotate()).BindToRotation(transform);
+            
         }
     
         private async UniTaskVoid OnDestroyAsync(float secs, int bombCount)
