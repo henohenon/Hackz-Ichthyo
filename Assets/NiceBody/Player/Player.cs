@@ -31,7 +31,6 @@ namespace Player
         public ReadOnlyReactiveProperty<IQ> IQ => iq_;
         public IQ SingularityIq_ => singularityIq_;
         public LearnedSkillGroup LearnedSkillGroup_ => learnedSkillGroup_;
-        public SuperComputer SuperComputer_ => superComputer_;
 
 
         private void Awake()
@@ -47,7 +46,7 @@ namespace Player
         private void Update()
         {
             state_?.OnUpdate();
-            SuperComputer_.Tick(iq_);
+            superComputer_.Tick(iq_);
 
             if (IQ.CurrentValue > SingularityIq_)
             {
@@ -55,7 +54,10 @@ namespace Player
             }
         }
 
-        public Input GetInput() => input_;
+        public Input GetInput()
+        {
+            return input_;
+        }
 
         public void OnChangeState(Type newType)
         {
