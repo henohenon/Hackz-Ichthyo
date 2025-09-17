@@ -31,8 +31,7 @@ public class HexAOE : MonoBehaviour
     {
         if (other.TryGetComponent<EnemyBase>(out var target))
         {
-            target.OnDamage(_damage);
-            
+            target.OnDamage(_damage);   
         }
         var rb = other.attachedRigidbody;
         if (rb != null)
