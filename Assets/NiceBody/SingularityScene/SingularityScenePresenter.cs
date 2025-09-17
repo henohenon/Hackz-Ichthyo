@@ -1,4 +1,5 @@
-﻿using R3;
+﻿using Player.State;
+using R3;
 using System.Linq;
 using UnityEngine;
 
@@ -12,11 +13,10 @@ public sealed class SingularityScenePresenter : MonoBehaviour
     private void Awake()
     {
         // IQ 表示
-        player_.IQ.Subscribe(iq =>
-            sceneView.NeedCalculateTime.text = GetIqLevel24(iq, player_.SingularityIq_).ToString());
+        player_.IQ.Subscribe(iq => sceneView.NeedCalculateTime.text = "必要計算時間: " + GetIqLevel24(iq, player_.SingularityIq_).ToString() + "時間");
 
         // スキル選択表示
-        player_.LearnedSkillGroup_.OnSelectLearnSkill.Subscribe(sceneView.OnOpenSelectLearnSkill);
+        player_.LearnedSkillGroup_.OnSelectLearnSkill.Subscribe(sceneView.OnOpenSelectLearnSkill).AddTo(this);
 
         // スキル選択クリック処理
         sceneView.SelectLearnSkillUIs
@@ -27,28 +27,34 @@ public sealed class SingularityScenePresenter : MonoBehaviour
                 {
                     player_.LearnedSkillGroup_.LearnSkill(_);
                     sceneView.OnCloseSelectLearnSkill();
-                })
+                }).AddTo(this)
             );
 
         // Health 表示更新
-        player_.Health.Subscribe(health => sceneView.HealthSlider.value = GetNormalizedHealth(health.Value, player_.MaxHealth.Value));
-        player_.LearnedSkillGroup_.OnLearnSkill.Subscribe(skill => sceneView.AddLearnSkill(skill.Skill));
+        player_.Health.Subscribe(health => sceneView.HealthSlider.value = GetNormalizedHealth(health.Value, player_.MaxHealth.Value)).AddTo(this);
+        player_.LearnedSkillGroup_.OnLearnSkill.Subscribe(skill => sceneView.AddLearnSkill(skill.Skill)).AddTo(this);
+        player_.GetState<DeathState>().OnDeath.Subscribe(_ => sceneView.OnEnableDeathCanvas()).AddTo(this);
     }
 
     private float GetNormalizedHealth(int current, int max)
     {
-        if (max <= 0) return 0f;
+        if (max <= 0)
+            return 0f;
+
         return Mathf.Clamp01((float)current / max);
     }
 
     private float GetIqLevel24(IQ IQ, IQ SingularityIQ)
     {
         if (SingularityIQ == null || SingularityIQ.Value == 0f)
-            return 0f;
+            return 24f;
 
         float current = IQ.Value;
         float max = SingularityIQ.Value;
 
-        return Mathf.Clamp01(current / max) * 24f;
+        float progress = Mathf.Clamp01(current / max);
+        float remaining = (1f - progress) * 24f;
+        float rounded = Mathf.Round(remaining * 10f) / 10f;
+        return rounded;
     }
 }
