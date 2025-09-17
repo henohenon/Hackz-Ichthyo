@@ -20,7 +20,7 @@ namespace Player.State
 
         public override void OnUpdate()
         {
-            
+            Rigidbody.velocity = Vector2.zero;
         }
 
         public override void OnExit()
