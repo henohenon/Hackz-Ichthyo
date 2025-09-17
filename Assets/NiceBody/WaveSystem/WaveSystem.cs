@@ -33,17 +33,25 @@ public sealed class WaveSystem : MonoBehaviour
     {
         try
         {
-            foreach (var wave in waves_)
-            {
-                Debug.Log($"Wave Start: {wave.name}");
+            int waveIndex = 0;
 
-                foreach (var enemyData in wave.SummonEnemies)
+            while (waveIndex < waves_.Count)
+            {
+                var wave = waves_[waveIndex];
+
+                if (player_.IQ.CurrentValue < waves_[waveIndex + 1].RequiredIQ)
                 {
-                    await SpawnEnemiesAsync(enemyData.GameObject_, enemyData.Count_, token);
+                    Debug.Log($"Waiting for IQ to reach {wave.RequiredIQ.Value} to start wave {wave.name}. Current IQ: {player_.IQ.CurrentValue}");
+                    foreach (var enemyData in wave.SummonEnemies)
+                    {
+                        await SpawnEnemiesAsync(enemyData.GameObject_, enemyData.Count_, token);
+                    }
+
+                    await UniTask.Delay(TimeSpan.FromSeconds(wave.CooldownSeconds), cancellationToken: token);
+                    continue;
                 }
 
-                Debug.Log($"Wave End: {wave.name}");
-                await UniTask.Delay(TimeSpan.FromSeconds(wave.CooldownSeconds), cancellationToken: token);
+                waveIndex++;
             }
 
             Debug.Log("All waves completed!");
