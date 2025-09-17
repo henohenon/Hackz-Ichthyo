@@ -1,78 +1,44 @@
 ﻿using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System;
+using LitMotion.Animation;
+using UnityEngine.Serialization;
 
-[RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(LitMotionAnimation))]
 public class HexAOE : MonoBehaviour
 {
-    [Header("演出パラメータ")]
-    [SerializeField] private float duration = 2f;
-    [SerializeField] private float rotationSpeed = 180f;
-    [SerializeField] private AnimationCurve shrinkCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
+    [SerializeField] private float lifeTime = 0.3f;
+    
+    private float _attractionForce = 2f;
+    private float _damage;
 
-    [Header("ダメージ設定")]
-    [SerializeField] private float attractionForce = 2f;
-
-    [SerializeField] private float size_;
-    [SerializeField] private float damage_;
-    [SerializeField] private bool attract_;
-
-    public void Initialize(float size, float damage)
+    public void Initialize(float size, float damage, float attractionForce)
     {
-        size_ = size;
-        damage_ = damage;
-        transform.localScale = Vector3.one * size_;
-        _ = RotateAndShrinkAsync(); // fire-and-forget
+        _damage = damage;
+        _attractionForce = attractionForce;
+        transform.localScale = Vector3.one * size;
+
+        OnDestroyAsync(lifeTime).Forget();
     }
-
-    public void EnableAttraction()
+    
+    private async UniTaskVoid OnDestroyAsync(float secs)
     {
-        attract_ = true;
-    }
-
-    private async UniTaskVoid RotateAndShrinkAsync()
-    {
-        float time = 0f;
-        Vector3 initialScale = Vector3.one * size_;
-
-        while (time < duration)
-        {
-            transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
-
-            float t = time / duration;
-            float scaleFactor = shrinkCurve.Evaluate(t);
-            transform.localScale = initialScale * scaleFactor;
-
-            time += Time.deltaTime;
-            await UniTask.Yield();
-        }
-
+        await UniTask.Delay(TimeSpan.FromSeconds(secs));
         Destroy(gameObject);
     }
-
-    private void Update()
-    {
-        if (!attract_) return;
-
-        var colliders = Physics2D.OverlapCircleAll(transform.position, size_);
-        foreach (var col in colliders)
-        {
-            var rb = col.attachedRigidbody;
-            if (rb != null)
-            {
-                Vector2 dir = (transform.position - rb.transform.position).normalized;
-                rb.velocity += dir * attractionForce * Time.deltaTime;
-            }
-        }
-    }
-
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
-        UnityEngine.Debug.Log("jifioe");
-
         if (other.TryGetComponent<EnemyBase>(out var target))
         {
-            target.OnDamage(damage_);
+            target.OnDamage(_damage);
+            
+        }
+        var rb = other.attachedRigidbody;
+        if (rb != null)
+        {
+            Vector2 dir = (transform.position - rb.transform.position).normalized;
+            rb.AddForce(dir * _attractionForce, ForceMode2D.Impulse);
         }
     }
 }
