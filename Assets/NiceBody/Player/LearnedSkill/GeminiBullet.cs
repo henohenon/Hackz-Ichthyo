@@ -11,10 +11,10 @@ public sealed class GeminiBullet : MonoBehaviour
         damage_ = damage;
         Destroy(gameObject, lifetime_);
     }
-
-    void Uate()
+    private void Update()
     {
-        transform.Translate(Vector3.forward * speed_ * Time.deltaTime);
+        var forward = Vector3.right * (speed_ * Time.deltaTime);
+        transform.Translate(forward);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -27,6 +27,4 @@ public sealed class GeminiBullet : MonoBehaviour
         enemy.OnDamage(damage_);
         Destroy(gameObject);
     }
-
-
 }

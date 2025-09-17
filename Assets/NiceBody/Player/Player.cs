@@ -58,6 +58,8 @@ namespace Player
 
         public Input GetInput() => input_;
 
+        public Vector2 GetMoveInput() => input_.Move.action.ReadValue<Vector2>();
+
         public void OnChangeState(Type newType)
         {
             if (!typeof(IState).IsAssignableFrom(newType))
@@ -85,7 +87,10 @@ namespace Player
         {
             var matchedContext = stateContextBase_.OfType<TContext>().FirstOrDefault();
             if (matchedContext == null)
+            {
+                Debug.LogWarning($"Context of type {typeof(TContext).Name} not found.");
                 return;
+            }
 
             var state = (IState)Activator.CreateInstance(
                             typeof(TState),
@@ -100,7 +105,6 @@ namespace Player
 
             states_.Add(typeof(TState), state);
 
-            Debug.LogWarning($"Context of type {typeof(TContext).Name} not found.");
         }
 
         public T GetState<T>() where T : class, IState
