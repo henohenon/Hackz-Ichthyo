@@ -4,8 +4,10 @@ using UnityEngine;
 
 abstract public class EnemyBase : MonoBehaviour
 {
+    [SerializeField] private IQ onDeathLearnAiIq_;
     [SerializeField] protected float hitPoint, speed, attackPower;
     [SerializeField] private Player.Player player_;
+
     protected Dictionary<ActionBase, float?> actionDurationPairs = new Dictionary<ActionBase, float?>();
 
     public void Initialize(Player.Player player)
@@ -50,6 +52,8 @@ abstract public class EnemyBase : MonoBehaviour
             Debug.LogWarning("Helper.Instance is null. Damage text not shown.");
         }
     }
+    protected bool IsDeath() => hitPoint <= 0;
+
     abstract protected void SetActions();
 
     void Start()
@@ -60,14 +64,15 @@ abstract public class EnemyBase : MonoBehaviour
 
     void Update()
     {
-        if (hitPoint <= 0)
+        if (IsDeath())
         {
-            Destroy(this.gameObject);
+            Player.AddIQ(onDeathLearnAiIq_);
+            Destroy(gameObject);
         }
         if (Vector3.Distance(player_.transform.position, this.transform.position) < 0.2f)
         {
-            onDamage(attackPower);
-            Destroy(this.gameObject);
+            OnDamage(attackPower);
+            Destroy(gameObject);
         }
     }
 
