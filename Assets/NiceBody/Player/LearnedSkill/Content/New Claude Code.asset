@@ -12,30 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3544114c1084dec8fcc598230d2533c, type: 3}
   m_Name: New Claude Code
   m_EditorClassIdentifier: 
-  icon_: {fileID: 0}
+  icon_: {fileID: 21300000, guid: 36fa60698c5acc04fb50c0a99309ff2e, type: 3}
   skillName_: Claude Code
-  skillDescription_: 
-  cooldown_secs_: 2
+  skillDescription_: "\u7206\u767A\u3059\u308B\u30DC\u30FC\u30EB\u3092\u653E\u3061\u307E\u3059"
+  cooldown_secs_: 5
   drawingDamagePrefab: {fileID: 1176535973315500161, guid: 623cb6bcc064ffc438b84ccce37fbe89, type: 3}
-  grades:
-  - size: 1
-    damage: 1
-    attractionForce: 0.1
-    moveSpeed: 2
-    lifeTime: 2
-    bombCount: 5
-    coolDown: 2
-  - size: 1.5
-    damage: 1.5
-    attractionForce: 0.13
-    moveSpeed: 3
-    lifeTime: 1
-    bombCount: 8
-    coolDown: 1
-  - size: 2
-    damage: 2.3
-    attractionForce: 0.16
-    moveSpeed: 4
-    lifeTime: 0.75
-    bombCount: 12
-    coolDown: 0.3
