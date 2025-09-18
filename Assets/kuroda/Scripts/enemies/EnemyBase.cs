@@ -50,8 +50,9 @@ abstract public class EnemyBase : MonoBehaviour
 
     public void OnDamage(float damage)
     {
-        if (!gameObject.activeSelf) return;
-        this.hitPoint -= damage;
+        if (!gameObject.activeSelf) 
+            return;
+        hitPoint -= damage + player_.AttackPower_;
 
         if (Helper.Instance != null)
         {
