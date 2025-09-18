@@ -6,14 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="f82b33c6-fe6a-42b5-8d14-fd30bcd2f957" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Hackz-Ichthyo/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Hackz-Ichthyo/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/NiceBody/Player/LearnedSkill/Content/ChatGpt.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/NiceBody/Player/LearnedSkill/Content/ChatGpt.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/NiceBody/Player/LearnedSkill/Content/Copoiilot.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/NiceBody/Player/LearnedSkill/Content/Copoiilot.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/NiceBody/Player/LearnedSkill/Content/Cursor.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/NiceBody/Player/LearnedSkill/Content/Cursor.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/NiceBody/Player/LearnedSkill/Content/Gemini.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/NiceBody/Player/LearnedSkill/Content/Gemini.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/NiceBody/Player/LearnedSkill/Content/New Claude Code.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/NiceBody/Player/LearnedSkill/Content/New Claude Code.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/NiceBody/WaveSystem/WaveSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/NiceBody/WaveSystem/WaveSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/EnemyBoss.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/EnemyBoss.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/kuroda/Assets/Resources/EnemyBoss2.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/kuroda/Assets/Resources/EnemyBoss2.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/NiceBody/Singularity.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/NiceBody/Singularity.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/WaveContent/Wave3-2.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/WaveContent/Wave3-2.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/kuroda/Assets/Resources/EnemyBoss2.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/kuroda/Assets/Resources/EnemyBoss2.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/kuroda/Scripts/enemies/EnemyBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/kuroda/Scripts/enemies/EnemyBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/kuroda/Scripts/enemies/EnemyBoss2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/kuroda/Scripts/enemies/EnemyBoss2.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +43,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f402f2945a7e49e4ba3cbb6c00f6963520a00/22/0d78c72c/ForceMode2D.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d44b17e136d09081da1e8fd0e8c83fde60e11818b9f2442d7ed8cb733fae895e/System.Collections.Generic.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/NiceBody/Player/LearnedSkill/ClaudeCode.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/NiceBody/Player/LearnedSkill/Content/Cursor.asset" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/NiceBody/Player/LearnedSkill/DeathEffect.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/NiceBody/Player/LearnedSkill/DrawingBomb.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/NiceBody/Player/LearnedSkill/DrawingDamage.cs" root0="FORCE_HIGHLIGHTING" />
@@ -151,7 +150,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1758163653778</updated>
-      <workItem from="1758163655580" duration="3582000" />
+      <workItem from="1758163655580" duration="5570000" />
     </task>
     <servers />
   </component>

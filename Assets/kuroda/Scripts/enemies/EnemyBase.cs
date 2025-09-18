@@ -59,7 +59,7 @@ abstract public class EnemyBase : MonoBehaviour
 
         if (Helper.Instance != null)
         {
-            Helper.Instance.ShowDamage(transform.position, (int)damage);
+            Helper.Instance.ShowDamage(transform.position, (int)damage+player_.AttackPower_);
         }
         else
         {

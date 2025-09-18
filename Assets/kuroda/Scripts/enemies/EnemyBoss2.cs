@@ -1,16 +1,32 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using kuroda.Scripts.actions;
-using UnityEngine;
 
 public class EnemyBoss2 : EnemyBase
 {
-    override protected void SetActions()
+    protected override void SetActions()
     {
+        var nullPo = new NullPo();
+        actionDurationPairs.Add(nullPo, null);
+
     }
-    override protected void OnPlayerHit()
+    private bool _hitted = false;
+    private readonly float _hitCoolDown = 0.2f;
+    protected override void OnPlayerHit()
     {
-        // Debug.Log("敵ボス2が当たってるよ");
-        // player_.OnDamage((int)attackPower);
+        if (_hitted) return;
+        player_.OnDamage((int)attackPower);
+        _hitted = true;
+        HitCoolDown().Forget();
+        // Destroy(this.gameObject);
+    }
+
+    private async UniTaskVoid HitCoolDown()
+    {
+        await UniTask.Delay(TimeSpan.FromSeconds(_hitCoolDown));
+        if (!gameObject.activeSelf) return;
+        _hitted = false;
     }
 }
