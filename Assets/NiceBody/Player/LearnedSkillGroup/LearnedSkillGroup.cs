@@ -4,7 +4,6 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using NiceBody.Player.LearnedSkill;
 using UnityEngine;
 using GameUnity;
 
@@ -38,19 +37,15 @@ namespace Player.Skill
                 return;
 
             Time.timeScale = 0;
-<<<<<<< Updated upstream
             Cursor.visible = true;
-=======
-            UnityEngine.Cursor.visible = true;
             Sound.PlaySE(SoundEffectType.SlillUp);
->>>>>>> Stashed changes
             onSelectLearnSkill.OnNext(selectSkillGroup);
         }
 
         public void LearnSkill(SkillBase skill)
         {
             Time.timeScale = 1;
-            Cursor.visible = false;
+            UnityEngine.Cursor.visible = false;
             if (skill == null)
                 return;
 

@@ -19,7 +19,7 @@ namespace Player.State
             Vector2 move = Input.Move.action.ReadValue<Vector2>();
             // Debug.Log(move);
 
-            Rigidbody.velocity = Context.MoveSpeed_ * move;
+            Rigidbody.velocity = Context.MoveSpeed * move;
 
             if (move.x != 0)
             {

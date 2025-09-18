@@ -11,16 +11,13 @@ public sealed class StartGame
 
     public async UniTask StartGameAsync()
     {
+        Cursor.visible = true;
+        Time.timeScale = 1f;
         startGameCanvas_.enabled = true;
 
-        textBox_.text = "あなたは最強のAIトータちゃん。あと24時間で人間のエンジニアをあなた一人で完全淘汰できる”シンギュラリティ”に到達する。";
+        textBox_.text = "愚かなエンジニア共を蹴散らして\nいち早く**AIシンギュラリティ**を迎えろ！";
 
-        await UniTask.Delay(TimeSpan.FromSeconds(5));
-
-        textBox_.text = "ところがそれを聞きつけた愚かな人間どもが阻止しようと襲ってくるようだ。";
-
-        await UniTask.Delay(TimeSpan.FromSeconds(3));
-        textBox_.text = "返り討ちにしていち早く”シンギュラリティ”を迎えよう！";
+        await UniTask.Delay(TimeSpan.FromSeconds(3.5f));
 
         startGameCanvas_.enabled = false;
     }

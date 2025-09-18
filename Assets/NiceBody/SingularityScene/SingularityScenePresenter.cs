@@ -20,6 +20,12 @@ public sealed class SingularityScenePresenter : MonoBehaviour
             var progress = GetIqProgress(iq, player_.SingularityIq_);
             var time = GetProgressStamp(progress);
             sceneView.SetSingularityTime(time, progress);
+            if (1 <= progress)
+            {
+                Cursor.visible = true;
+                Time.timeScale = 0;
+                sceneView.OnEnableKakuseiCanvas();
+            }
         });
 
         // スキル選択表示
@@ -38,12 +44,13 @@ public sealed class SingularityScenePresenter : MonoBehaviour
             );
 
         // Health 表示更新
-        player_.Health.Subscribe(health => sceneView.HealthSlider.value = GetNormalizedHealth(health.Value, player_.MaxHealth.Value)).AddTo(this);
+        player_.Health.Subscribe(health => sceneView.HealthSlider.value = GetNormalizedHealth(health, player_.MaxHealth)).AddTo(this);
         player_.LearnedSkillGroup_.OnLearnSkill.Subscribe(skill => sceneView.AddLearnSkill(skill.Skill)).AddTo(this);
         player_.GetState<DeathState>().OnDeath.Subscribe(_ =>
         {
             Cursor.visible = true;
             sceneView.OnEnableDeathCanvas();
+            Time.timeScale = 0;
         }).AddTo(this);
     }
 

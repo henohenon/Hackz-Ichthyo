@@ -16,7 +16,7 @@ MonoBehaviour:
   requiredIQ_:
     value_: 202
   summonEnemies:
-  - gameObject_: {fileID: 5021079513498498174, guid: df635b260d1844e418fe1b077d64a04d, type: 3}
-    count_: 2
-  - gameObject_: {fileID: 5021079513498498174, guid: e3fc3a4bc7c19af4e922f4ff284df11d, type: 3}
-    count_: 30
+  - type: 0
+    count: 10
+  - type: 2
+    count: 5

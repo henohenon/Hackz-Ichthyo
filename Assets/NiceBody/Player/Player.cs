@@ -20,8 +20,9 @@ namespace Player
         [SerializeField] private Animator animator_;
         [SerializeField] private LearnedSkillGroup learnedSkillGroup_;
 
-        [SerializeField] private Health maxHealth_;
-        [SerializeField] private SerializableReactiveProperty<Health> health_ = new(new Health(10));
+        private int maxHealth = 10;
+        [SerializeField] private int attackPower_;
+        [SerializeField] private SerializableReactiveProperty<int> health_ = new(10);
         [SerializeField] private IQ singularityIq_;
         [SerializeField] private SerializableReactiveProperty<IQ> iq_ = new();
 
@@ -30,12 +31,14 @@ namespace Player
         private readonly Dictionary<Type, IState> states_ = new();
         private IState state_;
 
-        public Health MaxHealth => maxHealth_;
-        public ReadOnlyReactiveProperty<Health> Health => health_;
+        public int MaxHealth => maxHealth;
+        public ReadOnlyReactiveProperty<int> Health => health_;
         public ReadOnlyReactiveProperty<IQ> IQ => iq_;
         public IQ SingularityIq_ => singularityIq_;
         public LearnedSkillGroup LearnedSkillGroup_ => learnedSkillGroup_;
         public SuperComputer SuperComputer_ => superComputer_;
+
+        public int AttackPower_ { get => attackPower_; set => attackPower_ = value; }
 
         private void Awake()
         {
@@ -124,17 +127,12 @@ namespace Player
         [Button]
         public void OnDamage(int damage)
         {
-<<<<<<< Updated upstream
-            health_.OnNext(new Health(health_.Value.Value - damage));
-            Debug.Log("PlayerのHP: " + health_.Value.Value);
-=======
             Sound.PlaySE(SoundEffectType.Damage);
             health_.OnNext(health_.Value - damage);
             Debug.Log("PlayerのHP: " + health_.Value);
->>>>>>> Stashed changes
         }
 
-        private bool IsDeath() => health_.Value.Value <= 0;
+        private bool IsDeath() => health_.Value <= 0;
 
         private int killCount = 0;
         [SerializeField]
@@ -152,11 +150,26 @@ namespace Player
             iq_.OnNext(iq_.Value + iq);
         }
 
-        private int getCounter()
+        /// <summary>
+        /// 指定された型の StateContext を取得する責任を持つ関数。
+        /// 意味：状態に紐づく意味的コンテキストの取得。
+        /// 拡張性：状態設計の抽象度を保ちつつ、型安全にアクセス可能。
+        /// </summary>
+        public TContext GetStateContext<TContext>() where TContext : StateContextBase
         {
-            Enemy1 enemy1 = new Enemy1();
-            Enemy2 enemy2 = new Enemy2();
-            return enemy1.getNumber() + enemy2.getNumber();
+            var context = stateContextBase_.OfType<TContext>().FirstOrDefault();
+            if (context == null)
+            {
+                Debug.LogWarning($"StateContext of type {typeof(TContext).Name} not found.");
+            }
+            return context;
         }
+
+        public void Heal(int value)
+        {
+            health_.Value = Math.Clamp(health_.CurrentValue + value, 0, MaxHealth);
+
+        }
+
     }
 }
