@@ -20,6 +20,12 @@ public sealed class SingularityScenePresenter : MonoBehaviour
             var progress = GetIqProgress(iq, player_.SingularityIq_);
             var time = GetProgressStamp(progress);
             sceneView.SetSingularityTime(time, progress);
+            if (1 <= progress)
+            {
+                Cursor.visible = true;
+                Time.timeScale = 0;
+                sceneView.OnEnableKakuseiCanvas();
+            }
         });
 
         // スキル選択表示

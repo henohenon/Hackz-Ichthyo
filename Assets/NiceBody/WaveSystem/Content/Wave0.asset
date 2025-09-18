@@ -16,5 +16,5 @@ MonoBehaviour:
   requiredIQ_:
     value_: 0
   summonEnemies:
-  - type: 2
+  - type: 0
     count: 1

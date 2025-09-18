@@ -11,6 +11,7 @@ public sealed class StartGame
 
     public async UniTask StartGameAsync()
     {
+        Cursor.visible = true;
         Time.timeScale = 1f;
         startGameCanvas_.enabled = true;
 
