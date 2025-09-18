@@ -47,6 +47,10 @@ public sealed class SingularitySceneView
     }
 
     public void AddLearnSkill(SkillBase learnSkill) => UnityEngine.Object.Instantiate(learnedSkillUISlotPrefab, skillSlotGroup).Icon.sprite = learnSkill.Icon;
-    public void OnCloseSelectLearnSkill()   => onLearnSkillCanvas.enabled   = false;
+    public void OnCloseSelectLearnSkill()
+    {
+        if (!deathCanvas_.enabled) onLearnSkillCanvas.enabled   = false;
+    }
+
     public void OnEnableDeathCanvas()       =>  deathCanvas_.enabled        = true;
 }

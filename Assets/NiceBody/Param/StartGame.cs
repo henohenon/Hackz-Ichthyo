@@ -11,6 +11,7 @@ public sealed class StartGame
 
     public async UniTask StartGameAsync()
     {
+        Time.timeScale = 1f;
         startGameCanvas_.enabled = true;
 
         textBox_.text = "愚かなエンジニア共を蹴散らして\nいち早く**AIシンギュラリティ**を迎えろ！";

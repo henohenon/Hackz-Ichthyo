@@ -26,11 +26,12 @@ abstract public class EnemyBase : MonoBehaviour
     {
         if (!gameObject.activeSelf) return;
         Context context = SetContext();
-        while (true)
+        while (gameObject.activeSelf)
         {
             foreach (KeyValuePair<ActionBase, float?> pair in actionDurationPairs)
             {
                 await pair.Key.DoAction(context, pair.Value);
+                if (!gameObject.activeSelf) return;
             }
         }
     }
@@ -68,11 +69,11 @@ abstract public class EnemyBase : MonoBehaviour
     private void Awake()
     {
         initHitpoint = hitPoint;
+        SetActions();
     }
 
-    void Start()
+    void OnEnable()
     {
-        SetActions();
         OnAction();
     }
 
@@ -111,6 +112,11 @@ abstract public class EnemyBase : MonoBehaviour
         {
             isPlayerInRange = false;
         }
+    }
+
+    private void OnDestroy()
+    {
+        actionDurationPairs.Clear();
     }
 
 

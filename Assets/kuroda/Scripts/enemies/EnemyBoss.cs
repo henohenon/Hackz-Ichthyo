@@ -1,34 +1,33 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using kuroda.Scripts.actions;
 using UnityEngine;
 
 public class EnemyBoss : EnemyBase
 {
-    override protected void SetActions()
+    protected override void SetActions()
     {
-        Walk action1 = new Walk();
-        actionDurationPairs.Add(action1, 5);
-        Stop stop = new Stop();
-        actionDurationPairs.Add(stop, null);
-        //Teleport teleport = new Teleport();
-        //actionDurationPairs.Add(teleport, null);
+        var turnToTarget = new TurnToTarget();
+        actionDurationPairs.Add(turnToTarget, 0.3f);
+        var dash = new Dash();
+        actionDurationPairs.Add(dash, 1);
     }
-    private bool hitted = false;
-    private float hitCoolDown = 0.2f;
-    override protected void OnPlayerHit()
+    private bool _hitted = false;
+    private readonly float _hitCoolDown = 0.2f;
+    protected override void OnPlayerHit()
     {
-        if (hitted) return;
+        if (_hitted) return;
         player_.OnDamage((int)attackPower);
-        hitted = true;
+        _hitted = true;
         HitCoolDown().Forget();
         // Destroy(this.gameObject);
     }
 
     private async UniTaskVoid HitCoolDown()
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(hitCoolDown));
+        await UniTask.Delay(TimeSpan.FromSeconds(_hitCoolDown));
         if (!gameObject.activeSelf) return;
-        hitted = false;
+        _hitted = false;
     }
 }

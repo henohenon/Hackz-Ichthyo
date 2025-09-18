@@ -44,6 +44,7 @@ public sealed class SingularityScenePresenter : MonoBehaviour
         {
             Cursor.visible = true;
             sceneView.OnEnableDeathCanvas();
+            Time.timeScale = 0;
         }).AddTo(this);
     }
 
