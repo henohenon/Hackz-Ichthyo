@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using GameUnity;
 
 namespace Player.Skill
 {
@@ -37,6 +38,7 @@ namespace Player.Skill
 
             Time.timeScale = 0;
             UnityEngine.Cursor.visible = true;
+            Sound.PlaySE(SoundEffectType.SlillUp);
             onSelectLearnSkill.OnNext(selectSkillGroup);
         }
 

@@ -21,22 +21,10 @@ namespace GameUnity
             soundPlayer.PlayBGM(bgmData);
         }
 
-        public static void PlaySE(GameCore.Asset.SoundData soundEffectData)
+        public static void PlaySE(SoundEffectType soundEffectType)
         {
-            soundPlayer.PlaySE(soundEffectData);
+            Debug.Log("SEを再生します: " + soundEffectType);
+            soundPlayer.PlaySE(soundEffectType);
         }
-
-
-#if UNITY_EDITOR
-        public static void PlayTestBGM()
-        {
-            soundPlayer.PlayTestBGM();
-        }
-
-        public static void PlayTestSoundEffect()
-        {
-            soundPlayer.PlayTestSoundEffect();
-        }
-#endif
     }
 }
