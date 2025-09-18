@@ -78,6 +78,7 @@ public sealed class WaveSystem : MonoBehaviour
                     {
                         var prefabsArray = enemyPrefabs[enemyData.Type];
                         var prefab = prefabsArray[Random.Range(0, prefabsArray.Length)];
+                        UnityEngine.Debug.Log(prefab);
                         var instance = Instantiate(prefab, Vector3.zero, Quaternion.identity);
                         instance.gameObject.SetActive(false);
 
