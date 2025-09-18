@@ -39,8 +39,9 @@ public sealed class WaveSystem : MonoBehaviour
 
         player_.GetState<DeathState>()
                .OnDeath
-               .Subscribe(_ => 
+               .Subscribe(_ =>
                {
+                   Sound.PlaySE(SoundEffectType.GameOver);
                    Debug.LogWarning("Player died. Cancelling wave system.");
                    cts_.Cancel();
                })
@@ -92,11 +93,12 @@ public sealed class WaveSystem : MonoBehaviour
                 if (waveIndex + 1 < waves_.Count &&
                     player_.IQ.CurrentValue < waves_[waveIndex + 1].RequiredIQ)
                 {
+                    Sound.PlaySE(SoundEffectType.WaveClear);
                     Debug.Log($"Waiting for IQ to reach {waves_[waveIndex + 1].RequiredIQ.Value} to start next wave.");
-                    continue; 
+                    continue;
                 }
 
-                waveIndex++; 
+                waveIndex++;
             }
 
             Debug.Log("All waves completed!");

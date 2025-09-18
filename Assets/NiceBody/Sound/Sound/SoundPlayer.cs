@@ -1,4 +1,5 @@
-﻿using GameCore.Asset;
+﻿using System.Collections.Generic;
+using GameCore.Asset;
 using UnityEngine;
 
 namespace GameUnity
@@ -9,11 +10,7 @@ namespace GameUnity
         [SerializeField] private SoundEffectAudioSource soundEffectAudioSource_;
         [SerializeField] private float masterVolume_;
         [SerializeField] private SoundData bgmData_;
-
-#if UNITY_EDITOR
-        [SerializeField] private SoundData test_bgmData;
-        [SerializeField] private SoundData test_SoundEffectData;
-#endif
+        [SerializeField] private List<SoundData> soundEffectDataList;
 
 
         public void Awake()
@@ -29,22 +26,9 @@ namespace GameUnity
             UnityEngine.Debug.Log("jfoiwjifa");
         }
 
-        public void PlaySE(SoundData soundData)
+        public void PlaySE(SoundEffectType soundEffectType)
         {
-            soundEffectAudioSource_.Play(soundData, masterVolume_);
+            soundEffectAudioSource_.Play((int)soundEffectType, soundEffectDataList[(int)soundEffectType], masterVolume_);
         }
-
-
-#if UNITY_EDITOR
-        public void PlayTestBGM()
-        {
-            PlayBGM(test_bgmData);
-        }
-
-        public void PlayTestSoundEffect()
-        {
-            PlaySE(test_SoundEffectData);
-        }
-#endif
     }
 }
