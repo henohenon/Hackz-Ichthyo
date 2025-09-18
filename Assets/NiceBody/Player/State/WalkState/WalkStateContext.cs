@@ -6,6 +6,11 @@ namespace Player.State
     {
         [SerializeField] private float moveSpeed_;
 
-        public float MoveSpeed_ => moveSpeed_;
+        public float MoveSpeed => moveSpeed_;
+
+        public void SetSpeed(float speed)
+        {
+            moveSpeed_ = speed;
+        }
     }
 }

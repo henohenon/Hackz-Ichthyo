@@ -12,7 +12,8 @@ public sealed class FollowTargetWithOffset : MonoBehaviour
 
     void LateUpdate()
     {
-        if (target == null) return;
+        if (target == null) 
+            return;
 
         // 意味：target の位置に offset を加えた空間的意味位置へ自身を移動
         transform.position = target.position + offset;

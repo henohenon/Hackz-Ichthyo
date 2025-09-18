@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using NiceBody.Player.LearnedSkill;
-using UnityEngine.Serialization;
 
 
 namespace Player
@@ -21,6 +20,7 @@ namespace Player
         [SerializeField] private LearnedSkillGroup learnedSkillGroup_;
 
         private int maxHealth = 10;
+        [SerializeField] private int attackPower_;
         [SerializeField] private SerializableReactiveProperty<int> health_ = new(10);
         [SerializeField] private IQ singularityIq_;
         [SerializeField] private SerializableReactiveProperty<IQ> iq_ = new();
@@ -36,6 +36,8 @@ namespace Player
         public IQ SingularityIq_ => singularityIq_;
         public LearnedSkillGroup LearnedSkillGroup_ => learnedSkillGroup_;
         public SuperComputer SuperComputer_ => superComputer_;
+
+        public int AttackPower_ { get => attackPower_; set => attackPower_ = value; }
 
         private void Awake()
         {
@@ -143,6 +145,21 @@ namespace Player
             }
 
             iq_.OnNext(iq_.Value + iq);
+        }
+
+        /// <summary>
+        /// 指定された型の StateContext を取得する責任を持つ関数。
+        /// 意味：状態に紐づく意味的コンテキストの取得。
+        /// 拡張性：状態設計の抽象度を保ちつつ、型安全にアクセス可能。
+        /// </summary>
+        public TContext GetStateContext<TContext>() where TContext : StateContextBase
+        {
+            var context = stateContextBase_.OfType<TContext>().FirstOrDefault();
+            if (context == null)
+            {
+                Debug.LogWarning($"StateContext of type {typeof(TContext).Name} not found.");
+            }
+            return context;
         }
 
         public void Heal(int value)
