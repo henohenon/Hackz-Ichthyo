@@ -174,6 +174,6 @@ MonoBehaviour:
     value_: 9500
   deathEffectPrefab: {fileID: 3444345840122618957, guid: 8758dadf244444b4a873c87ca1bc6e6d, type: 3}
   hitPoint: 30
-  speed: 4
+  speed: 1.5
   attackPower: 1
   player_: {fileID: 0}

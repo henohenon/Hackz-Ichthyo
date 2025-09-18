@@ -57,6 +57,7 @@ public sealed class WaveSystem : MonoBehaviour
         cts_?.Cancel();
         cts_?.Dispose();
     }
+    
     private async UniTaskVoid RunWavesAsync(CancellationToken token)
     {
         try
@@ -69,6 +70,7 @@ public sealed class WaveSystem : MonoBehaviour
 
                 Debug.Log($"Starting wave {wave.name}. Required IQ: {wave.RequiredIQ.Value}, Current IQ: {player_.IQ.CurrentValue}");
 
+                await UniTask.Yield(PlayerLoopTiming.Update);
                 // 敵召喚は必ず実行
                 foreach (var enemyData in wave.SummonEnemies)
                 {
