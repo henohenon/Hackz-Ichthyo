@@ -182,6 +182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onDeathLearnAiIq_:
     value_: 0
+  deathEffectPrefab: {fileID: 3444345840122618957, guid: 8758dadf244444b4a873c87ca1bc6e6d, type: 3}
   hitPoint: 100
   speed: 0.5
   attackPower: 5

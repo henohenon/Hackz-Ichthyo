@@ -9,7 +9,7 @@ public sealed class IgnoreParentRotation : MonoBehaviour
         initialRotation = transform.rotation;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         transform.rotation = initialRotation;
     }
