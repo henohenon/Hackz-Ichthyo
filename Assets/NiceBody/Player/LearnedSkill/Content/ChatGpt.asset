@@ -12,17 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1179ce303dc08b6479f6aafcce27c8d7, type: 3}
   m_Name: ChatGpt
   m_EditorClassIdentifier: 
-  icon_: {fileID: 0}
+  icon_: {fileID: 21300000, guid: 864a9a101b3de204fafefb5c8c067e02, type: 3}
   skillName_: GPT
-  skillDescription_: 
+  skillDescription_: "\u5468\u56F2\u306E\u6575\u3092\u5439\u304D\u98DB\u3070\u3057\u307E\u3059"
   cooldown_secs_: 1
   hexAOEPrefab: {fileID: 1378083854986080371, guid: 0404a25d84af32c4c8e9168943a0c056, type: 3}
-  baseSize: 1
-  baseDamage: 1
-  baseCount: 1
-  level2Size: 1.5
-  level2Damage: 1.5
-  level2Count: 3
-  level3Size: 2
-  level3Damage: 2
-  level3Count: 6

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88a82ab8c6788044e9bfd254add73822, type: 3}
   m_Name: Copoiilot
   m_EditorClassIdentifier: 
-  icon_: {fileID: 0}
+  icon_: {fileID: 21300000, guid: 46cb93ce78590bd42b75bdb6affce124, type: 3}
   skillName_: Copilot
-  skillDescription_: Copillot
+  skillDescription_: "\u79FB\u52D5\u30B9\u30D4\u30FC\u30C9\u304C\u4E0A\u6607\u3057\u307E\u3059"
   cooldown_secs_: 0.05
