@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NiceBody.Player.LearnedSkill;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -41,7 +40,7 @@ public sealed class SingularitySceneView
         onLearnSkillCanvas.enabled = true;
 
         // Zip で SkillBase と UI を結合して設定
-        skillGroup.LearnSkills
+        skillGroup.SelectRandomSkills()
             .Zip(SelectLearnSkillUIs, (skill, ui) => (skill, ui))
             .ToList()
             .ForEach(pair => pair.ui.SetSkillInfo(pair.skill));

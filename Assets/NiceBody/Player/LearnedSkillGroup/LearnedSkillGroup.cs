@@ -4,7 +4,6 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using NiceBody.Player.LearnedSkill;
 using UnityEngine;
 
 namespace Player.Skill

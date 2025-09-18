@@ -37,14 +37,16 @@ abstract public class EnemyBase : MonoBehaviour
     }
     protected Context SetContext()
     {
-        Context context = new Context();
-        context.EnemyTransform = this.transform;
-        context.PlayerTransform = Player.transform;
-        context.PlayerInput = Player.GetInput();
-        context.speed = this.speed;
-        context.EnemySpriteRenderer = GetComponent<SpriteRenderer>();
-        context.CoroutineRunner = this;
-        context.EnemyRigidbody2D = GetComponent<Rigidbody2D>();
+        Context context = new()
+        {
+            EnemyTransform = this.transform,
+            PlayerTransform = Player.transform,
+            PlayerInput = Player.GetInput(),
+            speed = this.speed,
+            EnemySpriteRenderer = GetComponent<SpriteRenderer>(),
+            CoroutineRunner = this,
+            EnemyRigidbody2D = GetComponent<Rigidbody2D>()
+        };
         return context;
     }
 
@@ -52,6 +54,7 @@ abstract public class EnemyBase : MonoBehaviour
     {
         if (!gameObject.activeSelf) 
             return;
+
         hitPoint -= damage + player_.AttackPower_;
 
         if (Helper.Instance != null)
