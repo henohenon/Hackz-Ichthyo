@@ -9,6 +9,7 @@ namespace kuroda.Scripts.actions
 {
     public class TurnToTarget: ActionBase
     {
+        private MotionHandle _handle;
         
         public override async Task DoAction(Context context, float? duration)
         {
@@ -22,8 +23,15 @@ namespace kuroda.Scripts.actions
             var angleRad = Mathf.Atan2(direction.y, direction.x); // ラジアンを取得
             var angleDeg = angleRad * Mathf.Rad2Deg; // 度数に変換
 
-            await LMotion.Create(context.EnemyTransform.eulerAngles.z, angleDeg, duration)
+            var handle = LMotion.Create(context.EnemyTransform.eulerAngles.z, angleDeg, duration)
                     .Bind(x => rb.transform.eulerAngles = new Vector3(0, 0, x));
+            await handle;
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _handle.TryCancel();
         }
     }
 }

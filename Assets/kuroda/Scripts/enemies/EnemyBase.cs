@@ -116,6 +116,10 @@ abstract public class EnemyBase : MonoBehaviour
 
     private void OnDestroy()
     {
+        foreach (var (key, value) in actionDurationPairs)
+        {
+            key.Dispose();
+        }
         actionDurationPairs.Clear();
     }
 
