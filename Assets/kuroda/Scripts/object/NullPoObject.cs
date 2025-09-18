@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class NullPoObject : MonoBehaviour
 {
-    public float speed = 2f; 
+    public float speed = 1f; 
     private Rigidbody2D rb;
     private int attackPower = 2;
     private int lifetime = 5;

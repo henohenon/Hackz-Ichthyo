@@ -18,7 +18,7 @@ namespace NiceBody.Player.LearnedSkill
         private async UniTaskVoid WaitAndDestroy()
         {
             await Task.Delay(TimeSpan.FromSeconds(1));
-            Destroy(gameObject);
+            if(gameObject) Destroy(gameObject);
         }
     }
 }

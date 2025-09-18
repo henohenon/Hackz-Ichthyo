@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(menuName = "Game/Wave")]
 public sealed class WaveData : ScriptableObject
@@ -17,10 +18,10 @@ public sealed class WaveData : ScriptableObject
     [Serializable]
     public sealed class SpawnEnemyData
     {
-        [SerializeField] private GameObject gameObject_;
-        [SerializeField] private int count_;
-
-        public GameObject GameObject_ => gameObject_;
-        public int Count_ => count_;
+        [SerializeField] private WaveSystem.EnemyType type;
+        [SerializeField] private int count;
+        
+        public WaveSystem.EnemyType Type => type;
+        public int Count => count;
     }
 }

@@ -9,7 +9,6 @@ namespace Title
         [SerializeField] private string sceneToLoad = "GameScene";
 
 
-
         public void OnPointerClick(PointerEventData eventData)
         {
             // クリックされたらシーンを切り替える

@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92908dfe64e328e408c38ae61cb33b91, type: 3}
   m_Name: Wave2
   m_EditorClassIdentifier: 
-  cooldown_secs: 3
+  cooldown_secs: 30
   requiredIQ_:
     value_: 201
   summonEnemies:
-  - gameObject_: {fileID: 5021079513498498174, guid: b4e162797094ed14492e97d91b2e3c9f, type: 3}
-    count_: 1
+  - type: 0
+    count: 15
+  - type: 1
+    count: 5
+  - type: 2
+    count: 1
