@@ -146,7 +146,12 @@ namespace Player
             {
                 learnedSkillGroup_.SelectLearnSkill();
             }
+            else if (200 < iq.Value)
+            {
+                learnedSkillGroup_.SelectLearnSkill();
+            }
 
+            
             iq_.OnNext(iq_.Value + iq);
         }
 

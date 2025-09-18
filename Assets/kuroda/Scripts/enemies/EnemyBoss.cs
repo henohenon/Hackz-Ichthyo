@@ -9,7 +9,7 @@ public class EnemyBoss : EnemyBase
     protected override void SetActions()
     {
         var turnToTarget = new TurnToTarget();
-        actionDurationPairs.Add(turnToTarget, 0.3f);
+        actionDurationPairs.Add(turnToTarget, 0.5f);
         var dash = new Dash();
         actionDurationPairs.Add(dash, 1);
     }
