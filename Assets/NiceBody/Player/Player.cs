@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using NiceBody.Player.LearnedSkill;
+using GameUnity;
 
 
 namespace Player
@@ -123,20 +124,27 @@ namespace Player
         [Button]
         public void OnDamage(int damage)
         {
+<<<<<<< Updated upstream
             health_.OnNext(new Health(health_.Value.Value - damage));
             Debug.Log("PlayerのHP: " + health_.Value.Value);
+=======
+            Sound.PlaySE(SoundEffectType.Damage);
+            health_.OnNext(health_.Value - damage);
+            Debug.Log("PlayerのHP: " + health_.Value);
+>>>>>>> Stashed changes
         }
 
         private bool IsDeath() => health_.Value.Value <= 0;
 
         private int killCount = 0;
-        [SerializeField] private int[] skillUpKillCounts = {
+        [SerializeField]
+        private int[] skillUpKillCounts = {
             5, 12, 22, 30, 43, 55, 60, 100
         };
         public void AddIQ(IQ iq)
         {
             killCount++;
-            if(Array.IndexOf(skillUpKillCounts, killCount) != -1)
+            if (Array.IndexOf(skillUpKillCounts, killCount) != -1)
             {
                 learnedSkillGroup_.SelectLearnSkill();
             }

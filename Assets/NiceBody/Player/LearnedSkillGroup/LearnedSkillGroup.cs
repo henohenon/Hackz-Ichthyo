@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading;
 using NiceBody.Player.LearnedSkill;
 using UnityEngine;
+using GameUnity;
 
 namespace Player.Skill
 {
@@ -37,7 +38,12 @@ namespace Player.Skill
                 return;
 
             Time.timeScale = 0;
+<<<<<<< Updated upstream
             Cursor.visible = true;
+=======
+            UnityEngine.Cursor.visible = true;
+            Sound.PlaySE(SoundEffectType.SlillUp);
+>>>>>>> Stashed changes
             onSelectLearnSkill.OnNext(selectSkillGroup);
         }
 

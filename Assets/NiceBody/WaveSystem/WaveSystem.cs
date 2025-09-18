@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Player.State;
 using R3;
+using Random = UnityEngine.Random;
 
 public sealed class WaveSystem : MonoBehaviour
 {
@@ -16,6 +17,17 @@ public sealed class WaveSystem : MonoBehaviour
     [SerializeField] private List<WaveData> waves_;
     [SerializeField] private List<EventBase> waveEvents_;
     [SerializeField] StartGame startGame_;
+    [SerializeField] private SerializedDictionary<EnemyType, EnemyBase[]> enemyPrefabs = new();
+
+    private Dictionary<EnemyType, List<EnemyBase>> enemyPool =
+        new Dictionary<EnemyType, List<EnemyBase>>
+    {
+
+        { EnemyType.Fighter, new() },
+        { EnemyType.Shooter, new() },
+        { EnemyType.Boss, new() }
+    
+    };
 
     private readonly CancellationTokenSource cts_ = new();
 
@@ -26,8 +38,9 @@ public sealed class WaveSystem : MonoBehaviour
 
         player_.GetState<DeathState>()
                .OnDeath
-               .Subscribe(_ => 
+               .Subscribe(_ =>
                {
+                   Sound.PlaySE(SoundEffectType.GameOver);
                    Debug.LogWarning("Player died. Cancelling wave system.");
                    cts_.Cancel();
                })
@@ -67,11 +80,12 @@ public sealed class WaveSystem : MonoBehaviour
                 if (waveIndex + 1 < waves_.Count &&
                     player_.IQ.CurrentValue < waves_[waveIndex + 1].RequiredIQ)
                 {
+                    Sound.PlaySE(SoundEffectType.WaveClear);
                     Debug.Log($"Waiting for IQ to reach {waves_[waveIndex + 1].RequiredIQ.Value} to start next wave.");
-                    continue; 
+                    continue;
                 }
 
-                waveIndex++; 
+                waveIndex++;
             }
 
             Debug.Log("All waves completed!");
@@ -112,12 +126,8 @@ public sealed class WaveSystem : MonoBehaviour
 
         try
         {
-            uint baseSeed = (uint)UnityEngine.Random.Range(1, int.MaxValue);
-            for (int i = 0; i < count; i++)
-            {
-                randomSeeds[i] = baseSeed + (uint)(i * 997);
-            }
-
+            uint baseSeed = (uint)Random.Range(1, int.MaxValue);
+            
             var job = new EnemySpawnPositionJob
             {
                 spawnRange = spawnEnemyDistsanceRange_,
@@ -170,11 +180,21 @@ public sealed class WaveSystem : MonoBehaviour
         {
             var rand = new Unity.Mathematics.Random(randomSeeds[index]);
 
-            float x = rand.NextFloat(xRange.x, xRange.y);
-            float y = rand.NextFloat(yRange.x, yRange.y);
-
-            Vector3 offset = new(x * spawnRange, y * spawnRange, 0f);
+            var x = rand.NextFloat(xRange.x, xRange.y);
+            var y = rand.NextFloat(yRange.x, yRange.y);
+            
+            var baseAngle =  rand.NextFloat(0f, 2f * Mathf.PI);
+            var offsetX = Mathf.Cos(baseAngle) * spawnRange + x;
+            var offsetY = Mathf.Sin(baseAngle) * spawnRange + y;
+            var offset = new Vector3(offsetX, offsetY, 0);
             spawnPositions[index] = playerPosition + offset;
         }
+    }
+    
+    public enum EnemyType
+    {
+        Fighter,
+        Shooter,
+        Boss
     }
 }

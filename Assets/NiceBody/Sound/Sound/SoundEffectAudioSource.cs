@@ -19,7 +19,9 @@ namespace GameUnity
 
         public void Initialize()
         {
-            for(int i = 0; i < maxConcurrentPlayLimit; i++)
+            currentPlayAudioSourceIndex = new PlayAudioSourcesIndex(maxConcurrentPlayLimit);
+            masterVolume_ = 1;
+            for (int i = 0; i < maxConcurrentPlayLimit; i++)
             {
                 GameObject audioSourceObject = new("audioSource");
                 audioSourceObject.transform.SetParent(groupTransform);
@@ -27,11 +29,11 @@ namespace GameUnity
             }
         }
 
-        public void Play(SoundData soundEffectData, float masterVolume)
+        public void Play(int index, SoundData soundEffectData, float masterVolume)
         {
-            audioSources_[currentPlayAudioSourceIndex.Value].volume = soundEffectData.Volume * masterVolume_ * masterVolume;
-            audioSources_[currentPlayAudioSourceIndex.Value].PlayOneShot(soundEffectData.AudioClip);
-            currentPlayAudioSourceIndex.OnNext();
+            audioSources_[index].volume = soundEffectData.Volume * masterVolume_ * masterVolume;
+            audioSources_[index].PlayOneShot(soundEffectData.AudioClip);
+            // currentPlayAudioSourceIndex.OnNext();
         }
 
 
