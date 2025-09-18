@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using GameUnity;
 using Player.State;
 using R3;
 using Random = UnityEngine.Random;

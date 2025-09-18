@@ -37,7 +37,7 @@ namespace Player.Skill
                 return;
 
             Time.timeScale = 0;
-            Cursor.visible = true;
+            UnityEngine.Cursor.visible = true;
             Sound.PlaySE(SoundEffectType.SlillUp);
             onSelectLearnSkill.OnNext(selectSkillGroup);
         }
