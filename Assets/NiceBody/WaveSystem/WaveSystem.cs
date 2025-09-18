@@ -57,7 +57,6 @@ public sealed class WaveSystem : MonoBehaviour
         cts_?.Cancel();
         cts_?.Dispose();
     }
-
     private async UniTaskVoid RunWavesAsync(CancellationToken token)
     {
         try
@@ -88,15 +87,17 @@ public sealed class WaveSystem : MonoBehaviour
                     await SpawnEnemiesAsync(activeEnemy, enemyData.Count, token);
                 }
 
-                await UniTask.Delay(TimeSpan.FromSeconds(wave.CooldownSeconds), cancellationToken: token);
-
-                // 次のウェーブに進む条件を判定
-                if (waveIndex + 1 < waves_.Count &&
-                    player_.IQ.CurrentValue < waves_[waveIndex + 1].RequiredIQ)
+                // 次のウェーブがある場合、必要なIQレベルに達するまで待機
+                if (waveIndex + 1 < waves_.Count)
                 {
+                    var nextWave = waves_[waveIndex + 1];
+                    Debug.Log($"Waiting for IQ to reach {nextWave.RequiredIQ.Value} to start next wave. Current: {player_.IQ.CurrentValue}");
+                    
+                    // IQが必要レベルに達するまで待機
+                    await UniTask.WaitUntil(() => player_.IQ.CurrentValue >= nextWave.RequiredIQ, cancellationToken: token);
+                    
                     Sound.PlaySE(SoundEffectType.WaveClear);
-                    Debug.Log($"Waiting for IQ to reach {waves_[waveIndex + 1].RequiredIQ.Value} to start next wave.");
-                    continue;
+                    Debug.Log($"IQ requirement met ({player_.IQ.CurrentValue} >= {nextWave.RequiredIQ.Value}). Moving to next wave.");
                 }
 
                 waveIndex++;
@@ -113,6 +114,7 @@ public sealed class WaveSystem : MonoBehaviour
             Debug.LogError($"Wave execution error: {ex}");
         }
     }
+
 
     private async UniTaskVoid RunEventsAsync(CancellationToken token)
     {
